@@ -1,0 +1,17 @@
+# dependencies
+node_modules/
+
+# Next.js build
+.next/
+out/
+
+# environment variables
+.env*
+!.env.example
+
+# Convex local files
+.convex/
+
+# OS files
+.DS_Store
+Thumbs.db
