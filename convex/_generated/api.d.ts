@@ -10,7 +10,12 @@
 
 import type * as admin from "../admin.js";
 import type * as auth from "../auth.js";
+import type * as bookmarks from "../bookmarks.js";
+import type * as freelancerProfiles from "../freelancerProfiles.js";
 import type * as http from "../http.js";
+import type * as jobs from "../jobs.js";
+import type * as portfolioItems from "../portfolioItems.js";
+import type * as proposals from "../proposals.js";
 import type * as users from "../users.js";
 
 import type {
@@ -22,7 +27,12 @@ import type {
 declare const fullApi: ApiFromModules<{
   admin: typeof admin;
   auth: typeof auth;
+  bookmarks: typeof bookmarks;
+  freelancerProfiles: typeof freelancerProfiles;
   http: typeof http;
+  jobs: typeof jobs;
+  portfolioItems: typeof portfolioItems;
+  proposals: typeof proposals;
   users: typeof users;
 }>;
 
