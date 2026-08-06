@@ -18,50 +18,39 @@ export const getDashboardStats = query({
   handler: async (ctx) => {
     await requireAdmin(ctx);
 
-    const [users, jobs, proposals, reports] = await Promise.all([
+    const [users, jobs, proposals, reports, recentLogs] = await Promise.all([
       ctx.db.query("userProfiles").collect(),
       ctx.db.query("jobs").collect(),
       ctx.db.query("proposals").collect(),
       ctx.db.query("reports").collect(),
+      ctx.db.query("activityLogs").order("desc").take(10),
     ]);
 
-    const usersByRole = {
-      ADMIN: users.filter((u) => u.role === "ADMIN").length,
-      FREELANCER: users.filter((u) => u.role === "FREELANCER").length,
-      CLIENT: users.filter((u) => u.role === "CLIENT").length,
-    };
-
-    const jobsByStatus = {
-      OPEN: jobs.filter((j) => j.status === "OPEN").length,
-      IN_PROGRESS: jobs.filter((j) => j.status === "IN_PROGRESS").length,
-      COMPLETED: jobs.filter((j) => j.status === "COMPLETED").length,
-      CANCELLED: jobs.filter((j) => j.status === "CANCELLED").length,
-    };
-
-    const proposalsByStatus = {
-      PENDING: proposals.filter((p) => p.status === "PENDING").length,
-      ACCEPTED: proposals.filter((p) => p.status === "ACCEPTED").length,
-      REJECTED: proposals.filter((p) => p.status === "REJECTED").length,
-    };
-
-    const now = Date.now();
-    const fourteenDaysAgo = now - 14 * 24 * 60 * 60 * 1000;
-    const recentUsers = users.filter((u) => u._creationTime >= fourteenDaysAgo);
-    const signupsByDay: Record<string, number> = {};
-    for (const u of recentUsers) {
-      const day = new Date(u._creationTime).toISOString().slice(0, 10);
-      signupsByDay[day] = (signupsByDay[day] || 0) + 1;
-    }
+    const activeFreelancers = users.filter(
+      (u) => u.role === "FREELANCER" && u.status === "APPROVED"
+    ).length;
+    const activeClients = users.filter(
+      (u) => u.role === "CLIENT" && u.status === "APPROVED"
+    ).length;
+    const pendingAccountRequests = users.filter((u) => u.status === "PENDING").length;
+    const pendingReports = reports.filter((r) => r.status === "PENDING").length;
 
     return {
       totalUsers: users.length,
-      totalJobs: jobs.length,
-      totalProposals: proposals.length,
-      pendingReports: reports.filter((r) => r.status === "PENDING").length,
-      usersByRole,
-      jobsByStatus,
-      proposalsByStatus,
-      signupsByDay,
+      activeFreelancers,
+      activeClients,
+      pendingRequests: pendingAccountRequests + pendingReports,
+      recentActivity: recentLogs.map((l) => ({
+        id: l._id,
+        action: l.action,
+        timestamp: l._creationTime,
+      })),
+      quickStats: {
+        totalJobs: jobs.length,
+        openJobs: jobs.filter((j) => j.status === "OPEN").length,
+        totalProposals: proposals.length,
+        pendingReports,
+      },
     };
   },
 });
@@ -128,65 +117,101 @@ export const listAuditLogs = query({
   },
 });
 
-export const getAnalytics = query({
+export const getFullAnalytics = query({
   args: {},
   handler: async (ctx) => {
     await requireAdmin(ctx);
 
-    const [jobs, proposals] = await Promise.all([
+    const [users, jobs, proposals, reviews] = await Promise.all([
+      ctx.db.query("userProfiles").collect(),
       ctx.db.query("jobs").collect(),
       ctx.db.query("proposals").collect(),
+      ctx.db.query("reviews").collect(),
     ]);
 
-    // Average bid amount per job category
-    const bidsByCategory: Record<string, { total: number; count: number }> = {};
-    for (const p of proposals) {
-      const job = jobs.find((j) => j._id === p.jobId);
-      if (!job) continue;
-      if (!bidsByCategory[job.category]) {
-        bidsByCategory[job.category] = { total: 0, count: 0 };
-      }
-      bidsByCategory[job.category].total += p.bidAmount;
-      bidsByCategory[job.category].count += 1;
-    }
-    const avgBidByCategory = Object.entries(bidsByCategory).map(
-      ([category, { total, count }]) => ({
-        category,
-        avgBid: Math.round(total / count),
-      })
-    );
-
-    // Jobs posted per day, last 30 days
+    // User Growth Chart — signups per day, last 30 days
     const now = Date.now();
     const thirtyDaysAgo = now - 30 * 24 * 60 * 60 * 1000;
-    const recentJobs = jobs.filter((j) => j._creationTime >= thirtyDaysAgo);
-    const jobsByDay: Record<string, number> = {};
-    for (const j of recentJobs) {
-      const day = new Date(j._creationTime).toISOString().slice(0, 10);
-      jobsByDay[day] = (jobsByDay[day] || 0) + 1;
+    const userGrowth: Record<string, number> = {};
+    for (const u of users.filter((u) => u._creationTime >= thirtyDaysAgo)) {
+      const day = new Date(u._creationTime).toISOString().slice(0, 10);
+      userGrowth[day] = (userGrowth[day] || 0) + 1;
     }
 
-    // Proposal acceptance rate
-    const totalProposals = proposals.length;
-    const accepted = proposals.filter((p) => p.status === "ACCEPTED").length;
-    const acceptanceRate =
-      totalProposals > 0 ? Math.round((accepted / totalProposals) * 100) : 0;
+    // Proposal Trends — proposals submitted per day, last 30 days
+    const proposalTrends: Record<string, number> = {};
+    for (const p of proposals.filter((p) => p._creationTime >= thirtyDaysAgo)) {
+      const day = new Date(p._creationTime).toISOString().slice(0, 10);
+      proposalTrends[day] = (proposalTrends[day] || 0) + 1;
+    }
 
-    // Jobs by category (volume)
-    const jobsByCategory: Record<string, number> = {};
+    // Project Completion Rate
+    const completedJobs = jobs.filter((j) => j.status === "COMPLETED").length;
+    const completionRate =
+      jobs.length > 0 ? Math.round((completedJobs / jobs.length) * 100) : 0;
+
+    // Popular Categories
+    const categoryCount: Record<string, number> = {};
     for (const j of jobs) {
-      jobsByCategory[j.category] = (jobsByCategory[j.category] || 0) + 1;
+      categoryCount[j.category] = (categoryCount[j.category] || 0) + 1;
     }
+    const popularCategories = Object.entries(categoryCount)
+      .map(([category, count]) => ({ category, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 6);
+
+    // Freelancer Performance — avg rating per freelancer, top 5
+    const ratingsByFreelancer: Record<string, { total: number; count: number; name: string }> = {};
+    for (const r of reviews) {
+      const target = users.find((u) => u.userId === r.targetUserId);
+      if (!target || target.role !== "FREELANCER") continue;
+      const key = r.targetUserId;
+      if (!ratingsByFreelancer[key]) {
+        ratingsByFreelancer[key] = { total: 0, count: 0, name: target.name };
+      }
+      ratingsByFreelancer[key].total += r.rating;
+      ratingsByFreelancer[key].count += 1;
+    }
+    const freelancerPerformance = Object.values(ratingsByFreelancer)
+      .map((f) => ({ name: f.name, avgRating: +(f.total / f.count).toFixed(1) }))
+      .sort((a, b) => b.avgRating - a.avgRating)
+      .slice(0, 5);
+
+    // Client Engagement — jobs posted per client, top 5
+    const jobsByClient: Record<string, { count: number; name: string }> = {};
+    for (const j of jobs) {
+      const client = users.find((u) => u.userId === j.clientUserId);
+      if (!client) continue;
+      const key = j.clientUserId;
+      if (!jobsByClient[key]) jobsByClient[key] = { count: 0, name: client.name };
+      jobsByClient[key].count += 1;
+    }
+    const clientEngagement = Object.values(jobsByClient)
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+
+    // Revenue / Commission Insights — assume 10% platform commission on accepted proposals
+    const COMMISSION_RATE = 0.1;
+    const acceptedProposals = proposals.filter((p) => p.status === "ACCEPTED");
+    const totalTransacted = acceptedProposals.reduce((sum, p) => sum + p.bidAmount, 0);
+    const commissionEarned = Math.round(totalTransacted * COMMISSION_RATE);
 
     return {
-      avgBidByCategory,
-      jobsByDay,
-      acceptanceRate,
-      totalProposals,
-      jobsByCategoryVolume: Object.entries(jobsByCategory).map(([category, count]) => ({
-        category,
-        count,
-      })),
+      userGrowth: Object.entries(userGrowth)
+        .sort(([a], [b]) => (a > b ? 1 : -1))
+        .map(([date, count]) => ({ date: date.slice(5), count })),
+      proposalTrends: Object.entries(proposalTrends)
+        .sort(([a], [b]) => (a > b ? 1 : -1))
+        .map(([date, count]) => ({ date: date.slice(5), count })),
+      completionRate,
+      popularCategories,
+      freelancerPerformance,
+      clientEngagement,
+      revenue: {
+        totalTransacted,
+        commissionEarned,
+        commissionRate: COMMISSION_RATE * 100,
+      },
     };
   },
 });
