@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-paper text-ink font-body antialiased;
+  background-image:
+    linear-gradient(rgba(28, 35, 33, 0.02) 1px, transparent 1px);
+  background-size: 100% 2.1rem;
+}
+
+h1, h2, h3, .font-display {
+  font-family: 'Fraunces', serif;
+  letter-spacing: -0.01em;
+}
+
+/* Focus visibility, kept even though the palette is quiet */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid theme('colors.ledger.600');
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------- Signature element: the status "stamp" ---------- */
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 0.28rem 0.6rem;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  transform: rotate(-1.4deg);
+  position: relative;
+  background: transparent;
+}
+
+.stamp::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 1px dotted currentColor;
+  border-radius: 2px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.stamp-open { color: theme('colors.stamp.open'); }
+.stamp-progress { color: theme('colors.stamp.progress'); transform: rotate(1deg); }
+.stamp-completed { color: theme('colors.stamp.completed'); transform: rotate(-0.6deg); }
+.stamp-cancelled { color: theme('colors.stamp.cancelled'); transform: rotate(1.6deg); }
+
+.card {
+  @apply bg-white/70 border border-rule rounded-sm;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-sm font-body text-sm font-medium transition-colors;
+}
+
+.btn-primary {
+  @apply btn bg-ledger-700 text-paper hover:bg-ledger-600;
+}
+
+.btn-secondary {
+  @apply btn bg-transparent border border-ink/20 text-ink hover:border-ink/50;
+}
+
+.btn-danger {
+  @apply btn bg-transparent border border-stamp-cancelled text-stamp-cancelled hover:bg-stamp-cancelled hover:text-paper;
+}
+
+.input {
+  @apply w-full border border-rule bg-white/60 rounded-sm px-3 py-2 text-sm text-ink placeholder:text-ink/40;
+}
+
+.label {
+  @apply block text-xs uppercase tracking-widest text-ink/50 mb-1 font-mono;
+}
