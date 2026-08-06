@@ -128,6 +128,69 @@ export const listAuditLogs = query({
   },
 });
 
+export const getAnalytics = query({
+  args: {},
+  handler: async (ctx) => {
+    await requireAdmin(ctx);
+
+    const [jobs, proposals] = await Promise.all([
+      ctx.db.query("jobs").collect(),
+      ctx.db.query("proposals").collect(),
+    ]);
+
+    // Average bid amount per job category
+    const bidsByCategory: Record<string, { total: number; count: number }> = {};
+    for (const p of proposals) {
+      const job = jobs.find((j) => j._id === p.jobId);
+      if (!job) continue;
+      if (!bidsByCategory[job.category]) {
+        bidsByCategory[job.category] = { total: 0, count: 0 };
+      }
+      bidsByCategory[job.category].total += p.bidAmount;
+      bidsByCategory[job.category].count += 1;
+    }
+    const avgBidByCategory = Object.entries(bidsByCategory).map(
+      ([category, { total, count }]) => ({
+        category,
+        avgBid: Math.round(total / count),
+      })
+    );
+
+    // Jobs posted per day, last 30 days
+    const now = Date.now();
+    const thirtyDaysAgo = now - 30 * 24 * 60 * 60 * 1000;
+    const recentJobs = jobs.filter((j) => j._creationTime >= thirtyDaysAgo);
+    const jobsByDay: Record<string, number> = {};
+    for (const j of recentJobs) {
+      const day = new Date(j._creationTime).toISOString().slice(0, 10);
+      jobsByDay[day] = (jobsByDay[day] || 0) + 1;
+    }
+
+    // Proposal acceptance rate
+    const totalProposals = proposals.length;
+    const accepted = proposals.filter((p) => p.status === "ACCEPTED").length;
+    const acceptanceRate =
+      totalProposals > 0 ? Math.round((accepted / totalProposals) * 100) : 0;
+
+    // Jobs by category (volume)
+    const jobsByCategory: Record<string, number> = {};
+    for (const j of jobs) {
+      jobsByCategory[j.category] = (jobsByCategory[j.category] || 0) + 1;
+    }
+
+    return {
+      avgBidByCategory,
+      jobsByDay,
+      acceptanceRate,
+      totalProposals,
+      jobsByCategoryVolume: Object.entries(jobsByCategory).map(([category, count]) => ({
+        category,
+        count,
+      })),
+    };
+  },
+});
+
 export const exportUsers = query({
   args: {},
   handler: async (ctx) => {
