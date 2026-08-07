@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { LogoutButton } from "@/components/shared/LogoutButton";
 import { usePathname } from "next/navigation";
 
 const navItems = [
@@ -10,6 +11,9 @@ const navItems = [
   { href: "/admin/analytics", label: "Analytics" },
   { href: "/admin/activity", label: "Activity" },
 ];
+import { LogoutButton } from "@/components/shared/LogoutButton"; // adjust path
+// ...inside the <nav> or below it:
+<LogoutButton />
 
 export function Sidebar() {
   const pathname = usePathname();
