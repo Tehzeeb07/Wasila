@@ -10,6 +10,9 @@ const navItems = [
   { href: "/admin/analytics", label: "Analytics" },
   { href: "/admin/activity", label: "Activity" },
 ];
+import { LogoutButton } from "@/components/shared/LogoutButton"; // adjust path
+// ...inside the <nav> or below it:
+<LogoutButton />
 
 export function Sidebar() {
   const pathname = usePathname();
