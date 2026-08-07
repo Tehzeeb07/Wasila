@@ -2,6 +2,13 @@ import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
 
+export const generateUploadUrl = mutation({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.storage.generateUploadUrl();
+  },
+});
+
 // Apna profile fetch karo
 export const getMyProfile = query({
   args: {},
@@ -25,6 +32,7 @@ export const upsertProfile = mutation({
     bio: v.optional(v.string()),
     hourlyRate: v.optional(v.number()),
     skills: v.array(v.string()),
+    resumeFileId: v.optional(v.id("_storage")),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
