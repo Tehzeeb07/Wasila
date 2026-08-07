@@ -44,7 +44,7 @@ export default function SignupPage() {
 
     completeSignup({ name, role })
       .then(() => {
-        router.push("/dashboard");
+        router.push(role === "FREELANCER" ? "/freelancer/dashboard" : "/client/dashboard");
       })
       .catch((err) => {
         console.error(err);
