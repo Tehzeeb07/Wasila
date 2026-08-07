@@ -3,12 +3,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+
 const navItems = [
   { name: "Dashboard", href: "/freelancer/dashboard" },
   { name: "Find Jobs", href: "/freelancer/jobs" },
   { name: "My Proposals", href: "/freelancer/proposals" },
   { name: "Saved Jobs", href: "/freelancer/bookmarks" },
   { name: "My Profile", href: "/freelancer/profile" },
+  { name: "Portfolio", href: "/freelancer/portfolio" },
+  { name: "Reviews", href: "/freelancer/reviews" },
 ];
 
 export default function FreelancerLayout({ children }) {

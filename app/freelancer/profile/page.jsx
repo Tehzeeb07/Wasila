@@ -7,11 +7,13 @@ import { api } from "@/convex/_generated/api";
 export default function FreelancerProfilePage() {
   const profile = useQuery(api.freelancerProfiles.getMyProfile);
   const upsertProfile = useMutation(api.freelancerProfiles.upsertProfile);
+  const generateUploadUrl = useMutation(api.freelancerProfiles.generateUploadUrl);
 
   const [headline, setHeadline] = useState("");
   const [bio, setBio] = useState("");
   const [hourlyRate, setHourlyRate] = useState("");
   const [skillsInput, setSkillsInput] = useState("");
+  const [resumeFile, setResumeFile] = useState(null);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -34,13 +36,28 @@ export default function FreelancerProfilePage() {
         .map((s) => s.trim())
         .filter(Boolean);
 
+      let resumeFileId = profile?.resumeFileId;
+
+      if (resumeFile) {
+        const uploadUrl = await generateUploadUrl();
+        const result = await fetch(uploadUrl, {
+          method: "POST",
+          headers: { "Content-Type": resumeFile.type },
+          body: resumeFile,
+        });
+        const { storageId } = await result.json();
+        resumeFileId = storageId;
+      }
+
       await upsertProfile({
         headline,
         bio,
         hourlyRate: hourlyRate ? Number(hourlyRate) : undefined,
         skills: skillsArray,
+        resumeFileId,
       });
       setMessage("✓ Profile saved successfully");
+      setResumeFile(null);
     } catch (err) {
       setMessage("Error: " + err.message);
     } finally {
@@ -120,6 +137,23 @@ export default function FreelancerProfilePage() {
               className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
             />
           </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Resume / CV
+          </label>
+          <input
+            type="file"
+            accept=".pdf,.doc,.docx"
+            onChange={(e) => setResumeFile(e.target.files[0])}
+            className="w-full text-sm"
+          />
+          {profile?.resumeFileId && !resumeFile && (
+            <p className="text-xs text-emerald-600 mt-1">
+              ✓ Resume already uploaded
+            </p>
+          )}
         </div>
 
         {skillsInput && (
