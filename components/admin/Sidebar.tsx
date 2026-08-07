@@ -39,6 +39,9 @@ export function Sidebar() {
           );
         })}
       </nav>
+      <div className="mt-auto px-2 pb-4">
+        <LogoutButton />
+      </div>
     </aside>
   );
 }
