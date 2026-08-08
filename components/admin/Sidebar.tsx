@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { LogoutButton } from "@/components/shared/LogoutButton";
 import { usePathname } from "next/navigation";
 
 const navItems = [
@@ -15,7 +16,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-56 shrink-0 border-r border-gray-200 bg-white p-4">
+    <aside className="w-56 shrink-0 border-r border-gray-200 bg-white p-4 flex flex-col h-screen">
       <h2 className="text-lg font-semibold mb-6 px-2">Admin</h2>
       <nav className="flex flex-col gap-1">
         {navItems.map((item) => {
@@ -26,7 +27,7 @@ export function Sidebar() {
               href={item.href}
               className={`px-3 py-2 rounded-md text-sm font-medium transition ${
                 isActive
-                  ? "bg-primary text-white"
+                  ? "bg-emerald-600 text-white"
                   : "text-gray-700 hover:bg-gray-100"
               }`}
             >
@@ -35,6 +36,9 @@ export function Sidebar() {
           );
         })}
       </nav>
+      <div className="mt-auto px-2 pb-4">
+        <LogoutButton />
+      </div>
     </aside>
   );
 }

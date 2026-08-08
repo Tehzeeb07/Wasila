@@ -18,6 +18,7 @@ import type * as jobs from "../jobs.js";
 import type * as messages from "../messages.js";
 import type * as portfolioItems from "../portfolioItems.js";
 import type * as proposals from "../proposals.js";
+import type * as reviews from "../reviews.js";
 import type * as users from "../users.js";
 
 import type {
@@ -37,6 +38,7 @@ declare const fullApi: ApiFromModules<{
   messages: typeof messages;
   portfolioItems: typeof portfolioItems;
   proposals: typeof proposals;
+  reviews: typeof reviews;
   users: typeof users;
 }>;
 
