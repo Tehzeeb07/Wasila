@@ -8,17 +8,23 @@ export const generateUploadUrl = mutation({
     return await ctx.storage.generateUploadUrl();
   },
 });
-
 export const getMyPortfolio = query({
   args: {},
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) return [];
 
-    return await ctx.db
+    const items = await ctx.db
       .query("portfolioItems")
       .withIndex("by_freelancer", (q) => q.eq("freelancerUserId", userId))
       .collect();
+
+    return await Promise.all(
+      items.map(async (item) => ({
+        ...item,
+        imageUrl: item.imageFileId ? await ctx.storage.getUrl(item.imageFileId) : null,
+      }))
+    );
   },
 });
 

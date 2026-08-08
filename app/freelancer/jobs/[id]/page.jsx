@@ -62,12 +62,13 @@ export default function JobDetailPage() {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div className="md:col-span-2 space-y-6">
         <div className="bg-white border border-gray-200 rounded-xl p-8">
+          <h1 className="text-2xl font-bold text-gray-900">{job.title}</h1>
           <Link
-  href={`/freelancer/jobs/${params.id}/messages`}
-  className="text-emerald-600 text-sm hover:underline"
->
-  💬 Open Project Chat
-</Link>
+            href={`/freelancer/jobs/${params.id}/messages`}
+            className="text-emerald-600 text-sm hover:underline"
+          >
+            💬 Open Project Chat
+          </Link>
           <p className="text-emerald-700 font-semibold mt-2">
             ${job.budgetMin ?? "?"} - ${job.budgetMax ?? "?"}
           </p>
