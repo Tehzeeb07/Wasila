@@ -216,6 +216,47 @@ export const getFullAnalytics = query({
   },
 });
 
+export const listPendingApprovals = query({
+  args: {},
+  handler: async (ctx) => {
+    await requireAdmin(ctx);
+    return await ctx.db
+      .query("userProfiles")
+      .filter((q) => q.eq(q.field("status"), "PENDING"))
+      .order("desc")
+      .collect();
+  },
+});
+
+export const approveUser = mutation({
+  args: { targetProfileId: v.id("userProfiles") },
+  handler: async (ctx, args) => {
+    const adminId = await requireAdmin(ctx);
+    await ctx.db.patch(args.targetProfileId, { status: "APPROVED" });
+    await ctx.db.insert("auditLogs", {
+      actorUserId: adminId,
+      action: "APPROVE_ACCOUNT",
+      targetType: "userProfiles",
+      targetId: args.targetProfileId,
+    });
+  },
+});
+
+export const rejectUser = mutation({
+  args: { targetProfileId: v.id("userProfiles"), reason: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    const adminId = await requireAdmin(ctx);
+    await ctx.db.patch(args.targetProfileId, { status: "SUSPENDED" });
+    await ctx.db.insert("auditLogs", {
+      actorUserId: adminId,
+      action: "REJECT_ACCOUNT",
+      targetType: "userProfiles",
+      targetId: args.targetProfileId,
+      metadata: { reason: args.reason },
+    });
+  },
+});
+
 export const exportUsers = query({
   args: {},
   handler: async (ctx) => {
