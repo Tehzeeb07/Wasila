@@ -12,10 +12,12 @@ export function UserTable({
   users,
   onSuspend,
   onReinstate,
+  onApprove,
 }: {
   users: UserRow[] | undefined;
   onSuspend: (id: string) => void;
   onReinstate: (id: string) => void;
+  onApprove: (id: string) => void;
 }) {
   return (
     <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
@@ -63,6 +65,14 @@ export function UserTable({
               </td>
               <td className="px-4 py-3">{u.twoFactorEnabled ? "On" : "Off"}</td>
               <td className="px-4 py-3 text-right space-x-2">
+                {u.status === "PENDING" && (
+                  <button
+                    onClick={() => onApprove(u._id)}
+                    className="text-primary hover:underline text-xs font-medium"
+                  >
+                    Approve
+                  </button>
+                )}
                 {u.status !== "SUSPENDED" ? (
                   <button
                     onClick={() => onSuspend(u._id)}
