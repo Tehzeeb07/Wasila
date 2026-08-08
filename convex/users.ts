@@ -20,7 +20,7 @@ export const completeSignup = mutation({
     const profileId = await ctx.db.insert("userProfiles", {
       userId,
       role: args.role,
-      status: "PENDING",
+      status: "APPROVED",
       name: args.name,
       twoFactorEnabled: false,
       failedLoginCount: 0,

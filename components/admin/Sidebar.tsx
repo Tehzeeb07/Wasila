@@ -10,7 +10,6 @@ const navItems = [
   { href: "/admin/reports", label: "Reports" },
   { href: "/admin/analytics", label: "Analytics" },
   { href: "/admin/activity", label: "Activity" },
-  { href: "/admin/approvals", label: "Approvals" },
 ];
 
 export function Sidebar() {
