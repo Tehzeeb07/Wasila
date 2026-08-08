@@ -52,7 +52,6 @@ export const getJobById = query({
 
 // ==================== Client-side (new) ====================
 
-// All jobs the signed-in client has posted, newest first.
 export const listMine = query({
   args: {},
   handler: async (ctx) => {
@@ -66,7 +65,6 @@ export const listMine = query({
   },
 });
 
-// e.g. { statuses: ["IN_PROGRESS", "COMPLETED", "CANCELLED"] } for the Projects screen.
 export const listMineByStatuses = query({
   args: { statuses: v.array(statusValidator) },
   handler: async (ctx, args) => {
@@ -86,9 +84,6 @@ export const get = query({
   handler: async (ctx, args) => await ctx.db.get(args.jobId),
 });
 
-// Job + whichever proposal is currently ACCEPTED on it (there's no
-// acceptedProposalId field on jobs, so we derive the assigned freelancer by
-// looking up the one ACCEPTED proposal on this job) — powers the project screen.
 export const getWithAssignedFreelancer = query({
   args: { jobId: v.id("jobs") },
   handler: async (ctx, args) => {
@@ -162,8 +157,6 @@ export const update = mutation({
   },
 });
 
-// Client-driven status changes: mark a project completed or cancelled
-// (moving OPEN -> IN_PROGRESS happens in proposals.accept instead).
 export const setStatus = mutation({
   args: { jobId: v.id("jobs"), status: statusValidator },
   handler: async (ctx, args) => {
