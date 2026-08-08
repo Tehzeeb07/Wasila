@@ -42,7 +42,13 @@ export default function LoginPage() {
       return;
     }
 
-    router.push(profile.role === "FREELANCER" ? "/freelancer/dashboard" : "/client/dashboard");
+    if (profile.role === "ADMIN") {
+      router.push("/admin/dashboard");
+    } else if (profile.role === "FREELANCER") {
+      router.push("/freelancer/dashboard");
+    } else {
+      router.push("/client/dashboard");
+    }
   }, [pendingLogin, isAuthenticated, profile, router]);
 
   return (
