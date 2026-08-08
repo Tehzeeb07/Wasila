@@ -18,16 +18,6 @@ export default function AdminUsersPage() {
   );
   const exportRows = useQuery(api.admin.exportUsers);
   const setStatus = useMutation(api.users.setUserStatus);
-  const approve = useMutation(api.admin.approveUser);
-
-  async function handleApprove(profileId: string) {
-    try {
-      await approve({ targetProfileId: profileId as any });
-      toast.success("User approved");
-    } catch (e: any) {
-      toast.error(e.message ?? "Failed to approve user");
-    }
-  }
 
   async function handleSuspend(profileId: string) {
     try {
@@ -79,7 +69,7 @@ export default function AdminUsersPage() {
         ))}
       </div>
 
-      <UserTable users={users} onSuspend={handleSuspend} onReinstate={handleReinstate} onApprove={handleApprove} />
+      <UserTable users={users} onSuspend={handleSuspend} onReinstate={handleReinstate} />
     </div>
   );
 }

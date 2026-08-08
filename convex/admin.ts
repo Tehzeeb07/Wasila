@@ -216,17 +216,6 @@ export const getFullAnalytics = query({
   },
 });
 
-export const listPendingApprovals = query({
-  args: {},
-  handler: async (ctx) => {
-    await requireAdmin(ctx);
-    return await ctx.db
-      .query("userProfiles")
-      .filter((q) => q.eq(q.field("status"), "PENDING"))
-      .order("desc")
-      .collect();
-  },
-});
 
 export const approveUser = mutation({
   args: { targetProfileId: v.id("userProfiles") },
