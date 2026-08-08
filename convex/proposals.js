@@ -13,7 +13,6 @@ export const submitProposal = mutation({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not logged in");
-    // Check if already applied
     const existing = await ctx.db
       .query("proposals")
       .withIndex("by_job_and_freelancer", (q) =>
@@ -59,8 +58,6 @@ export const withdrawProposal = mutation({
 
 // ==================== Client-side (new) ====================
 
-// All proposals on a job, with the freelancer's name/headline attached,
-// newest first. Used on the client's job-detail / proposal-review screen.
 export const listForJob = query({
   args: { jobId: v.id("jobs") },
   handler: async (ctx, args) => {
@@ -91,8 +88,6 @@ export const listForJob = query({
   },
 });
 
-// Every PENDING proposal across every job the signed-in client owns —
-// powers the top-level "Proposals" inbox page.
 export const listPendingForClient = query({
   args: {},
   handler: async (ctx) => {
@@ -124,8 +119,6 @@ export const listPendingForClient = query({
   },
 });
 
-// Client accepts a proposal: that proposal -> ACCEPTED, every other pending
-// proposal on the job -> REJECTED, job -> IN_PROGRESS.
 export const accept = mutation({
   args: { proposalId: v.id("proposals") },
   handler: async (ctx, args) => {
