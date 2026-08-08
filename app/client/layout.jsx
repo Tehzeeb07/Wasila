@@ -15,6 +15,10 @@ export default function ClientLayout({ children }) {
       router.replace("/login");
     } else if (profile && profile.role !== "CLIENT") {
       router.replace("/");
+    } else if (profile && profile.status === "PENDING") {
+      router.replace("/pending-approval");
+    } else if (profile && profile.status === "SUSPENDED") {
+      router.replace("/suspended");
     }
   }, [profile, router]);
 
