@@ -32,30 +32,22 @@ export const listForJob = query({
           .query("userProfiles")
           .withIndex("by_userId", (q) => q.eq("userId", m.senderUserId))
           .unique();
-<<<<<<< HEAD
-        return { ...m, senderName: profile?.name };
-=======
         return {
           ...m,
           senderName: profile?.name,
           fileUrl: m.fileId ? await ctx.storage.getUrl(m.fileId) : null,
         };
->>>>>>> zainab
       })
     );
   },
 });
 
 export const send = mutation({
-<<<<<<< HEAD
-  args: { jobId: v.id("jobs"), content: v.string() },
-=======
   args: {
     jobId: v.id("jobs"),
     content: v.string(),
     fileId: v.optional(v.id("_storage")),
   },
->>>>>>> zainab
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
@@ -64,10 +56,6 @@ export const send = mutation({
       jobId: args.jobId,
       senderUserId: userId,
       content: args.content,
-<<<<<<< HEAD
-    });
-  },
-=======
       fileId: args.fileId,
     });
   },
@@ -78,5 +66,4 @@ export const generateUploadUrl = mutation({
   handler: async (ctx) => {
     return await ctx.storage.generateUploadUrl();
   },
->>>>>>> zainab
 });
