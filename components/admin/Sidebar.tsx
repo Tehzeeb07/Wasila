@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { LogoutButton } from "@/components/shared/LogoutButton";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navItems = [
@@ -17,7 +17,12 @@ export function Sidebar() {
 
   return (
     <aside className="w-56 shrink-0 border-r border-[#556B2F] bg-[#2E3820] p-4 flex flex-col h-screen">
-      <h2 className="text-lg font-semibold mb-6 px-2 text-primary">Admin</h2>
+      <Link
+        href="/"
+        className="text-lg font-semibold mb-6 px-2 text-primary hover:underline block"
+      >
+        ← Wasila
+      </Link>
       <nav className="flex flex-col gap-1">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
