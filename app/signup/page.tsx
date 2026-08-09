@@ -91,7 +91,7 @@ export default function SignupPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <p className={`text-xs mt-1 ${password.length > 0 && password.length < 8 ? "text-red-500" : "text-gray-400"}`}>
+          <p className={`text-sm mt-1 ${password.length > 0 && password.length < 8 ? "text-red-500" : "text-white-400"}`}>
             Must be at least 8 characters
           </p>
         </div>
