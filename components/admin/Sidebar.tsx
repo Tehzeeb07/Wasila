@@ -16,8 +16,8 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-56 shrink-0 border-r border-gray-200 bg-white p-4 flex flex-col h-screen">
-      <h2 className="text-lg font-semibold mb-6 px-2">Admin</h2>
+    <aside className="w-56 shrink-0 border-r border-[#556B2F] bg-[#2E3820] p-4 flex flex-col h-screen">
+      <h2 className="text-lg font-semibold mb-6 px-2 text-primary">Admin</h2>
       <nav className="flex flex-col gap-1">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
@@ -27,8 +27,8 @@ export function Sidebar() {
               href={item.href}
               className={`px-3 py-2 rounded-md text-sm font-medium transition ${
                 isActive
-                  ? "bg-emerald-600 text-white"
-                  : "text-gray-700 hover:bg-gray-100"
+                  ? "bg-primary text-[#3D4A2A]"
+                  : "text-green-100 hover:bg-[#425030]"
               }`}
             >
               {item.label}
