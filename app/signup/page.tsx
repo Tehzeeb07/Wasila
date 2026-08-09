@@ -33,9 +33,16 @@ export default function SignupPage() {
       // Don't call completeSignup yet — wait for isAuthenticated to flip
       // true below, so the Convex client has the auth token propagated.
       setPendingSignup(true);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      setError("Signup failed. Check your details and try again.");
+      const message = err?.message ?? "";
+      if (message.includes("Invalid password") || password.length < 8) {
+        setError("Password must be at least 8 characters.");
+      } else if (message.includes("already exists") || message.includes("InvalidAccountId")) {
+        setError("An account with this email already exists. Try logging in instead.");
+      } else {
+        setError("Signup failed. Check your details and try again.");
+      }
     }
   }
 
@@ -76,12 +83,18 @@ export default function SignupPage() {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <input
-          className="border p-2 w-full"
-          placeholder="Password"
-          type="password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div>
+          <input
+            className="border p-2 w-full"
+            placeholder="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <p className={`text-xs mt-1 ${password.length > 0 && password.length < 8 ? "text-red-500" : "text-gray-400"}`}>
+            Must be at least 8 characters
+          </p>
+        </div>
 
         <select
           className="border p-2 w-full"
