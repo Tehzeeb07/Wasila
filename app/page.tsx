@@ -21,7 +21,7 @@ export default function Home() {
       </nav>
 
       <div className="flex-1 flex flex-col items-center justify-center px-4 text-center">
-        <h1 className="text-5xl md:text-6xl font-bold mb-4 text-gray-900">
+        <h1 className="text-5xl md:text-6xl font-bold mb-4 text-white">
           Find work. Hire talent.
         </h1>
         <p className="text-lg text-gray-500 max-w-xl mb-8">
