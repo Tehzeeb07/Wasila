@@ -31,17 +31,13 @@ export default function SignupPage() {
         flow: "signUp",
         name,
       });
-      // Don't call completeSignup yet — wait for isAuthenticated to flip
-      // true below, so the Convex client has the auth token propagated.
       setPendingSignup(true);
     } catch (err: any) {
       console.error(err);
       const message = err?.message ?? "";
       if (message.includes("Invalid password") || password.length < 8) {
         setError("Password must be at least 8 characters.");
-        if (message.includes("Invalid admin invite code")) {
-          setError("Incorrect admin invite code.");
-        } else if (message.includes("already exists") || message.includes("InvalidAccountId")) {
+      } else if (message.includes("already exists") || message.includes("InvalidAccountId")) {
         setError("An account with this email already exists. Try logging in instead.");
       } else {
         setError("Signup failed. Check your details and try again.");
@@ -62,12 +58,17 @@ export default function SignupPage() {
           router.push("/client/dashboard");
         }
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
-        setError("Account created but profile setup failed. Contact support.");
+        const message = err?.message ?? "";
+        if (message.includes("Invalid admin invite code")) {
+          setError("Incorrect admin invite code.");
+        } else {
+          setError("Account created but profile setup failed. Contact support.");
+        }
         setPendingSignup(false);
       });
-  }, [pendingSignup, isAuthenticated, completeSignup, name, role, router]);
+  }, [pendingSignup, isAuthenticated, completeSignup, name, role, adminCode, router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -100,7 +101,7 @@ export default function SignupPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <p className={`text-sm mt-1 ${password.length > 0 && password.length < 8 ? "text-red-500" : "text-white-400"}`}>
+          <p className={`text-sm mt-1 ${password.length > 0 && password.length < 8 ? "text-red-500" : "text-gray-400"}`}>
             Must be at least 8 characters
           </p>
         </div>
