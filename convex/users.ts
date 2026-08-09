@@ -2,12 +2,18 @@ import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
 
+const ADMIN_INVITE_CODE = "WASILA-ADMIN-2026"; // change this to something only your team knows
+
 export const completeSignup = mutation({
   args: {
-    role: v.union(v.literal("FREELANCER"), v.literal("CLIENT")),
+    role: v.union(v.literal("FREELANCER"), v.literal("CLIENT"), v.literal("ADMIN")),
     name: v.string(),
+    adminCode: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    if (args.role === "ADMIN" && args.adminCode !== ADMIN_INVITE_CODE) {
+      throw new Error("Invalid admin invite code");
+    }
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
 
@@ -28,9 +34,10 @@ export const completeSignup = mutation({
 
     if (args.role === "FREELANCER") {
       await ctx.db.insert("freelancerProfiles", { userId, skills: [] });
-    } else {
+    } else if (args.role === "CLIENT") {
       await ctx.db.insert("clientProfiles", { userId });
     }
+    // ADMIN gets no freelancer/client profile row — just the userProfiles entry
 
     await ctx.db.insert("activityLogs", {
       userId,
