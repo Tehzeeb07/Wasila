@@ -7,7 +7,7 @@ export default function Home() {
       <nav className="flex items-center justify-between px-8 py-5">
         <span className="text-xl font-bold text-primary">Wasila</span>
         <div className="flex items-center gap-4">
-          <Link href="/login" className="text-sm font-medium text-gray-600 hover:text-gray-900">
+          <Link href="/login" className="text-sm font-medium text-white-600 hover:text-gray-900">
             Login
           </Link>
           <Link
@@ -24,8 +24,8 @@ export default function Home() {
         <h1 className="text-5xl md:text-6xl font-bold mb-4 text-white">
           Find work. Hire talent.
         </h1>
-        <p className="text-lg text-gray-500 max-w-xl mb-8">
-          Wasila connects freelancers and clients — post jobs, submit proposals,
+        <p className="text-lg text-white-500 max-w-xl mb-8">
+          Wasila connects freelancers and clients- post jobs, submit proposals,
           manage projects, and get paid for great work.
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
