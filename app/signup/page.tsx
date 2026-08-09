@@ -15,7 +15,8 @@ export default function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState<"FREELANCER" | "CLIENT">("FREELANCER");
+  const [role, setRole] = useState<"FREELANCER" | "CLIENT" | "ADMIN">("FREELANCER");
+  const [adminCode, setAdminCode] = useState("");
   const [pendingSignup, setPendingSignup] = useState(false);
   const [error, setError] = useState("");
 
@@ -38,7 +39,9 @@ export default function SignupPage() {
       const message = err?.message ?? "";
       if (message.includes("Invalid password") || password.length < 8) {
         setError("Password must be at least 8 characters.");
-      } else if (message.includes("already exists") || message.includes("InvalidAccountId")) {
+        if (message.includes("Invalid admin invite code")) {
+          setError("Incorrect admin invite code.");
+        } else if (message.includes("already exists") || message.includes("InvalidAccountId")) {
         setError("An account with this email already exists. Try logging in instead.");
       } else {
         setError("Signup failed. Check your details and try again.");
@@ -49,9 +52,15 @@ export default function SignupPage() {
   useEffect(() => {
     if (!pendingSignup || !isAuthenticated) return;
 
-    completeSignup({ name, role })
+    completeSignup({ name, role, adminCode: role === "ADMIN" ? adminCode : undefined })
       .then(() => {
-        router.push(role === "FREELANCER" ? "/freelancer/dashboard" : "/client/dashboard");
+        if (role === "ADMIN") {
+          router.push("/admin/dashboard");
+        } else if (role === "FREELANCER") {
+          router.push("/freelancer/dashboard");
+        } else {
+          router.push("/client/dashboard");
+        }
       })
       .catch((err) => {
         console.error(err);
@@ -99,11 +108,22 @@ export default function SignupPage() {
         <select
           className="border p-2 w-full"
           value={role}
-          onChange={(e) => setRole(e.target.value as "FREELANCER" | "CLIENT")}
+          onChange={(e) => setRole(e.target.value as "FREELANCER" | "CLIENT" | "ADMIN")}
         >
           <option value="FREELANCER">Freelancer</option>
           <option value="CLIENT">Client</option>
+          <option value="ADMIN">Admin</option>
         </select>
+
+        {role === "ADMIN" && (
+          <input
+            className="border p-2 w-full"
+            placeholder="Admin invite code"
+            type="password"
+            value={adminCode}
+            onChange={(e) => setAdminCode(e.target.value)}
+          />
+        )}
 
         <button
           type="submit"
