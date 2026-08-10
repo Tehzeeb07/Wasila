@@ -2,7 +2,7 @@ import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
 
-const ADMIN_INVITE_CODE = "WASILA-ADMIN-2026"; // change this to something only your team knows
+const ADMIN_INVITE_CODE = "Wasila"; // change this to something only your team knows
 
 export const completeSignup = mutation({
   args: {
