@@ -11,7 +11,7 @@ export const completeSignup = mutation({
     adminCode: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    if (args.role === "ADMIN" && args.adminCode !== ADMIN_INVITE_CODE) {
+    if (args.role === "ADMIN" && args.adminCode?.trim() !== ADMIN_INVITE_CODE.trim()) {
       throw new Error("Invalid admin invite code");
     }
     const userId = await getAuthUserId(ctx);
