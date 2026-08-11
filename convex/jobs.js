@@ -30,6 +30,54 @@ export const listOpenJobs = query({
   },
 });
 
+// All jobs the client has posted that have at least one accepted proposal
+// (i.e. actually have someone to message) — powers the Messages inbox.
+export const listMineWithChats = query({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return [];
+
+    const jobs = await ctx.db
+      .query("jobs")
+      .withIndex("by_client", (q) => q.eq("clientUserId", userId))
+      .order("desc")
+      .collect();
+
+    const result = [];
+    for (const job of jobs) {
+      const accepted = await ctx.db
+        .query("proposals")
+        .withIndex("by_job", (q) => q.eq("jobId", job._id))
+        .filter((q) => q.eq(q.field("status"), "ACCEPTED"))
+        .unique();
+
+      if (!accepted) continue; // no assigned freelancer yet = nothing to chat about
+
+      const profile = await ctx.db
+        .query("userProfiles")
+        .withIndex("by_userId", (q) => q.eq("userId", accepted.freelancerUserId))
+        .unique();
+
+      const lastMessage = await ctx.db
+        .query("messages")
+        .withIndex("by_job", (q) => q.eq("jobId", job._id))
+        .order("desc")
+        .first();
+
+      result.push({
+        jobId: job._id,
+        jobTitle: job.title,
+        freelancerName: profile?.name ?? "Freelancer",
+        lastMessagePreview: lastMessage?.content ?? "No messages yet",
+        lastMessageAt: lastMessage?._creationTime ?? job._creationTime,
+      });
+    }
+
+    return result.sort((a, b) => b.lastMessageAt - a.lastMessageAt);
+  },
+});
+
 export const searchJobs = query({
   args: { searchTerm: v.string() },
   handler: async (ctx, args) => {
