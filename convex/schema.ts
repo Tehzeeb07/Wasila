@@ -82,7 +82,14 @@ export default defineSchema({
     senderUserId: v.id("users"),
     content: v.string(),
     fileId: v.optional(v.id("_storage")),
+    readBy: v.optional(v.array(v.id("users"))),
   }).index("by_job", ["jobId"]),
+
+  typingIndicators: defineTable({
+    jobId: v.id("jobs"),
+    userId: v.id("users"),
+    updatedAt: v.number(),
+  }).index("by_job_and_user", ["jobId", "userId"]),
 
   reviews: defineTable({
     jobId: v.id("jobs"),
