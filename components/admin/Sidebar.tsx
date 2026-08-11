@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Link from "next/link";
+import { LogoutButton } from "@/components/shared/LogoutButton";
 import { usePathname } from "next/navigation";
 
 const navItems = [
