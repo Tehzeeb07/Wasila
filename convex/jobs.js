@@ -18,6 +18,61 @@ async function requireClientOwner(ctx, jobId) {
 }
 
 // ==================== Freelancer-side (existing) ====================
+export const getRecommendedJobs = query({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return [];
+
+    const profile = await ctx.db
+      .query("freelancerProfiles")
+      .withIndex("by_userId", (q) => q.eq("userId", userId))
+      .first();
+
+    if (!profile?.skills?.length) return [];
+
+    const openJobs = await ctx.db
+      .query("jobs")
+      .withIndex("by_status", (q) => q.eq("status", "OPEN"))
+      .collect();
+
+    const mySkills = profile.skills.map((s) => s.toLowerCase());
+    const myRate = profile.hourlyRate;
+
+    const scored = openJobs.map((job) => {
+      let score = 0;
+
+      // Skill overlap (60% weight)
+      const jobSkills = (job.skills ?? []).map((s) => s.toLowerCase());
+      const matchedSkills = jobSkills.filter((s) => mySkills.includes(s));
+      const skillScore = jobSkills.length > 0
+        ? (matchedSkills.length / jobSkills.length) * 60
+        : 0;
+
+      // Budget fit (25% weight) — job budget should be close to freelancer's rate
+      let budgetScore = 0;
+      if (myRate && job.budgetMax) {
+        const diff = Math.abs(job.budgetMax - myRate * 10); // rough estimate
+        budgetScore = Math.max(0, 25 - diff / 20);
+      } else {
+        budgetScore = 12;
+      }
+
+      // Recency (15% weight) — newer jobs score higher
+      const daysOld = (Date.now() - job._creationTime) / (1000 * 60 * 60 * 24);
+      const recencyScore = Math.max(0, 15 - daysOld);
+
+      score = skillScore + budgetScore + recencyScore;
+
+      return { ...job, matchScore: Math.round(score), matchedSkills };
+    });
+
+    return scored
+      .filter((j) => j.matchScore > 20)
+      .sort((a, b) => b.matchScore - a.matchScore)
+      .slice(0, 6);
+  },
+});
 
 export const listOpenJobs = query({
   args: {},
