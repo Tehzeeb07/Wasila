@@ -30,6 +30,49 @@ export const submitProposal = mutation({
   },
 });
 
+// All jobs where I (the freelancer) am the accepted proposal — powers the
+// freelancer's Messages inbox, mirroring listMineWithChats on the client side.
+export const listMyChats = query({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return [];
+
+    const myAccepted = await ctx.db
+      .query("proposals")
+      .withIndex("by_freelancer", (q) => q.eq("freelancerUserId", userId))
+      .filter((q) => q.eq(q.field("status"), "ACCEPTED"))
+      .collect();
+
+    const result = [];
+    for (const proposal of myAccepted) {
+      const job = await ctx.db.get(proposal.jobId);
+      if (!job) continue;
+
+      const clientProfile = await ctx.db
+        .query("userProfiles")
+        .withIndex("by_userId", (q) => q.eq("userId", job.clientUserId))
+        .unique();
+
+      const lastMessage = await ctx.db
+        .query("messages")
+        .withIndex("by_job", (q) => q.eq("jobId", job._id))
+        .order("desc")
+        .first();
+
+      result.push({
+        jobId: job._id,
+        jobTitle: job.title,
+        clientName: clientProfile?.name ?? "Client",
+        lastMessagePreview: lastMessage?.content ?? "No messages yet",
+        lastMessageAt: lastMessage?._creationTime ?? job._creationTime,
+      });
+    }
+
+    return result.sort((a, b) => b.lastMessageAt - a.lastMessageAt);
+  },
+});
+
 export const getMyProposals = query({
   args: {},
   handler: async (ctx) => {
