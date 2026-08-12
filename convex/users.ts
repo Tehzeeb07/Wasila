@@ -1,6 +1,7 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
-import { getAuthUserId } from "@convex-dev/auth/server";
+import { getAuthUserId, getAuthUserIdentity } from "@convex-dev/auth/server";
+
 
 const ADMIN_INVITE_CODE = "Wasila"; // change this to something only your team knows
 
@@ -28,6 +29,7 @@ export const completeSignup = mutation({
       role: args.role,
       status: "APPROVED",
       name: args.name,
+      email: identity.email,
       twoFactorEnabled: false,
       failedLoginCount: 0,
     });
@@ -68,6 +70,8 @@ export const listUsers = query({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
+    const identity = await getAuthUserIdentity(ctx);
+    if (!identity?.email) throw new Error("Email not found");
     const me = await ctx.db
       .query("userProfiles")
       .withIndex("by_userId", (q) => q.eq("userId", userId))

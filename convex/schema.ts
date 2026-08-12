@@ -26,7 +26,7 @@ export default defineSchema({
   twoFactorSecret: v.optional(v.string()),
   userId: v.id("users"),
 
-  email: v.string(), // ← add this
+  email: v.optional(v.string()), // ← add this
 }),
 
   freelancerProfiles: defineTable({
