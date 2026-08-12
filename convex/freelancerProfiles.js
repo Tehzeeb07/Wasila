@@ -25,6 +25,28 @@ export const getMyProfile = query({
   },
 });
 
+export const setAvailability = mutation({
+  args: {
+    availability: v.union(
+      v.literal("AVAILABLE"),
+      v.literal("BUSY"),
+      v.literal("NOT_ACCEPTING")
+    ),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("Not authenticated");
+
+    const profile = await ctx.db
+      .query("freelancerProfiles")
+      .withIndex("by_userId", (q) => q.eq("userId", userId))
+      .unique();
+    if (!profile) throw new Error("Profile not found");
+
+    await ctx.db.patch(profile._id, { availability: args.availability });
+  },
+});
+
 // Profile banao ya update karo
 export const upsertProfile = mutation({
   args: {

@@ -37,6 +37,9 @@ export default defineSchema({
     hourlyRate: v.optional(v.number()),
     resumeFileId: v.optional(v.id("_storage")),
     skills: v.array(v.string()),
+    availability: v.optional(
+      v.union(v.literal("AVAILABLE"), v.literal("BUSY"), v.literal("NOT_ACCEPTING"))
+    ),
   }).index("by_userId", ["userId"]),
 
   clientProfiles: defineTable({
