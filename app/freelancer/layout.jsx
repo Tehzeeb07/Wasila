@@ -24,6 +24,7 @@ const navItems = [
   { name: "My Profile", href: "/freelancer/profile", icon: User },
   { name: "Portfolio", href: "/freelancer/portfolio", icon: Briefcase },
   { name: "Reviews", href: "/freelancer/reviews", icon: Star },
+  { name: "Messages", href: "/freelancer/messages", icon: Inbox },
 ];
 
 export default function FreelancerLayout({ children }) {

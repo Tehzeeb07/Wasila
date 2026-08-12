@@ -24,10 +24,12 @@ export default function ClientSidebar({ name }) {
   }
 
   return (
-    <aside className="w-60 shrink-0 border-r border-gray-200 bg-white flex flex-col">
-      <div className="px-6 py-6 border-b border-gray-200">
-        <p className="text-[0.65rem] tracking-widest uppercase text-gray-400">Wasila</p>
-        <h1 className="text-xl font-semibold mt-1">Client Portal</h1>
+    <aside className="w-60 shrink-0 border-r border-[#556B2F] bg-[#2E3820] flex flex-col">
+      <div className="px-6 py-6 border-b border-[#556B2F]">
+        <Link href="/" className="text-[0.65rem] tracking-widest uppercase text-primary hover:underline">
+          Wasila
+        </Link>
+        <h1 className="text-xl font-semibold mt-1 text-green-50">Client Portal</h1>
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-1">
@@ -38,7 +40,9 @@ export default function ClientSidebar({ name }) {
               key={item.href}
               href={item.href}
               className={`block px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                active ? "bg-blue-600 text-white" : "text-gray-600 hover:bg-gray-100"
+                active
+                  ? "bg-primary text-[#3D4A2A]"
+                  : "text-green-100 hover:bg-[#425030]"
               }`}
             >
               {item.label}
@@ -47,11 +51,11 @@ export default function ClientSidebar({ name }) {
         })}
       </nav>
 
-      <div className="px-6 py-4 border-t border-gray-200">
-        <p className="text-sm font-medium truncate">{name}</p>
+      <div className="px-6 py-4 border-t border-[#556B2F]">
+        <p className="text-sm font-medium truncate text-green-50">{name}</p>
         <button
           onClick={handleSignOut}
-          className="text-xs uppercase tracking-widest text-gray-400 hover:text-red-600 mt-2"
+          className="text-xs uppercase tracking-widest text-green-300 hover:text-red-400 mt-2"
         >
           Sign out
         </button>
