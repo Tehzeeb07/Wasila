@@ -24,10 +24,11 @@ export default defineSchema({
   ),
   twoFactorEnabled: v.boolean(),
   twoFactorSecret: v.optional(v.string()),
-  userId: v.id("users"),
-
-  email: v.optional(v.string()), // ← add this
-}),
+    userId: v.id("users"),
+    email: v.optional(v.string()),
+  })
+    .index("by_userId", ["userId"])
+    .index("by_role", ["role"]),
 
   freelancerProfiles: defineTable({
     userId: v.id("users"),
