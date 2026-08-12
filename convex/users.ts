@@ -2,7 +2,7 @@ import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
 
-const ADMIN_INVITE_CODE = "WASILA-ADMIN-2026"; // change this to something only your team knows
+const ADMIN_INVITE_CODE = "Wasila"; // change this to something only your team knows
 
 export const completeSignup = mutation({
   args: {
@@ -11,7 +11,7 @@ export const completeSignup = mutation({
     adminCode: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    if (args.role === "ADMIN" && args.adminCode !== ADMIN_INVITE_CODE) {
+    if (args.role === "ADMIN" && args.adminCode?.trim() !== ADMIN_INVITE_CODE.trim()) {
       throw new Error("Invalid admin invite code");
     }
     const userId = await getAuthUserId(ctx);
