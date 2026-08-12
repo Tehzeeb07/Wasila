@@ -9,16 +9,25 @@ export default defineSchema({
   // Extend the built-in `users` table's data via a separate profile table
   // rather than editing authTables directly.
   userProfiles: defineTable({
-    userId: v.id("users"),
-    role: v.union(v.literal("ADMIN"), v.literal("FREELANCER"), v.literal("CLIENT")),
-    status: v.union(v.literal("PENDING"), v.literal("APPROVED"), v.literal("SUSPENDED")),
-    name: v.string(),
-    twoFactorEnabled: v.boolean(),
-    twoFactorSecret: v.optional(v.string()),
-    lastLoginAt: v.optional(v.number()),
-    failedLoginCount: v.number(),
-  }).index("by_userId", ["userId"])
-    .index("by_role", ["role"]),
+  failedLoginCount: v.float64(),
+  lastLoginAt: v.optional(v.float64()),
+  name: v.string(),
+  role: v.union(
+    v.literal("ADMIN"),
+    v.literal("FREELANCER"),
+    v.literal("CLIENT")
+  ),
+  status: v.union(
+    v.literal("PENDING"),
+    v.literal("APPROVED"),
+    v.literal("SUSPENDED")
+  ),
+  twoFactorEnabled: v.boolean(),
+  twoFactorSecret: v.optional(v.string()),
+  userId: v.id("users"),
+
+  email: v.string(), // ← add this
+}),
 
   freelancerProfiles: defineTable({
     userId: v.id("users"),

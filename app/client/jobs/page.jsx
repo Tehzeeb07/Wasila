@@ -85,7 +85,7 @@ export default function ClientJobsPage() {
                 {job.status === "OPEN" && (
                   <Link
                     href={`/client/post-job?jobId=${job._id}`}
-                    className="text-xs uppercase tracking-widest text-gray-400 hover:text-gray-700"
+                    className="text-sm uppercase tracking-widest text-green-200 hover:text-white"
                   >
                     Edit
                   </Link>
@@ -93,7 +93,7 @@ export default function ClientJobsPage() {
                 {job.status === "OPEN" && (
                   <button
                     onClick={() => handleDelete(job._id)}
-                    className="text-xs uppercase tracking-widest text-gray-400 hover:text-red-600"
+                    className="text-sm uppercase tracking-widest text-green-200 hover:text-red-400"
                   >
                     Delete
                   </button>
