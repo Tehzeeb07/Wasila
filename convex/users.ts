@@ -9,6 +9,7 @@ export const completeSignup = mutation({
   args: {
     role: v.union(v.literal("FREELANCER"), v.literal("CLIENT"), v.literal("ADMIN")),
     name: v.string(),
+    email: v.string(),
     adminCode: v.optional(v.string()),
   },
   handler: async (ctx, args) => {

@@ -48,7 +48,12 @@ export default function SignupPage() {
   useEffect(() => {
     if (!pendingSignup || !isAuthenticated) return;
 
-    completeSignup({ name, role, adminCode: role === "ADMIN" ? adminCode : undefined })
+    completeSignup({
+      name,
+      email,
+      role,
+      adminCode: role === "ADMIN" ? adminCode : undefined,
+    })
       .then(() => {
         if (role === "ADMIN") {
           router.push("/admin/dashboard");
