@@ -2,12 +2,14 @@ import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
 
+
 const ADMIN_INVITE_CODE = "Wasila"; // change this to something only your team knows
 
 export const completeSignup = mutation({
   args: {
     role: v.union(v.literal("FREELANCER"), v.literal("CLIENT"), v.literal("ADMIN")),
     name: v.string(),
+    email: v.string(),
     adminCode: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
@@ -26,6 +28,7 @@ export const completeSignup = mutation({
     const profileId = await ctx.db.insert("userProfiles", {
       userId,
       role: args.role,
+      email: args.email,
       status: "APPROVED",
       name: args.name,
       twoFactorEnabled: false,

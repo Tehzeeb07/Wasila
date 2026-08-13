@@ -8,3 +8,21 @@
 html {
   scroll-behavior: smooth;
 }
+
+:where(.bg-white) {
+  background-color: #425030 !important;
+  color: #f0fdf4;
+}
+
+:where(.bg-white) input,
+:where(.bg-white) textarea,
+:where(.bg-white) select {
+  background-color: #3D4A2A !important;
+  color: #f0fdf4 !important;
+  border-color: #556B2F !important;
+}
+
+:where(.bg-white) input::placeholder,
+:where(.bg-white) textarea::placeholder {
+  color: #a3b18a !important;
+}
