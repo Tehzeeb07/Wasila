@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { AvailabilityToggle } from "@/components/shared/AvailabilityToggle";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 
