@@ -17,7 +17,7 @@ export default function FreelancerProfilePage() {
   const [resumeFile, setResumeFile] = useState(null);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
-
+  <AvailabilityToggle current={profile?.availability} />
   useEffect(() => {
     if (profile) {
       setHeadline(profile.headline || "");
