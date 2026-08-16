@@ -108,6 +108,13 @@ export default function FreelancerProfilePage() {
             </div>
           </div>
 
+          <div className="pb-6 border-b border-gray-100">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Availability
+            </label>
+            <AvailabilityToggle current={profile?.availability} />
+          </div>
+
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Professional Headline
