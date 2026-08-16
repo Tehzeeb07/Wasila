@@ -47,13 +47,12 @@ export default function FreelancerLayout({ children }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition ${
-                  active
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg text-base font-semibold transition ${active
                     ? "bg-primary text-[#3D4A2A]"
-                    : "text-green-100 hover:bg-[#425030]"
-                }`}
+                    : "text-green-50 hover:bg-[#425030] hover:text-white"
+                  }`}
               >
-                <Icon size={18} strokeWidth={2} />
+                <Icon size={20} strokeWidth={2} />
                 {item.name}
               </Link>
             );

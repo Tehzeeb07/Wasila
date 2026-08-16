@@ -7,6 +7,7 @@
 
 html {
   scroll-behavior: smooth;
+  font-size: 17px;
 }
 
 :where(.bg-white) {
@@ -19,10 +20,32 @@ html {
 :where(.bg-white) select {
   background-color: #3D4A2A !important;
   color: #f0fdf4 !important;
-  border-color: #556B2F !important;
+  border-color: #6b8348 !important;
+  font-size: 1rem !important;
 }
 
 :where(.bg-white) input::placeholder,
 :where(.bg-white) textarea::placeholder {
   color: #a3b18a !important;
+}
+
+:where(.bg-white) .text-gray-400,
+:where(.bg-white) .text-gray-500,
+:where(.bg-white) .text-gray-600,
+:where(.bg-white) .text-gray-700,
+:where(.bg-white) .text-gray-900 {
+  color: #d1e8c4 !important;
+}
+
+:where(.bg-white) label {
+  color: #e8f5d9 !important;
+  font-size: 1rem !important;
+}
+
+.text-xs {
+  font-size: 0.85rem !important;
+}
+
+.text-sm {
+  font-size: 0.95rem !important;
 }
