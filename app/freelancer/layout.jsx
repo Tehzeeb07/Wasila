@@ -30,13 +30,13 @@ export default function FreelancerLayout({ children }) {
   const pathname = usePathname();
 
   return (
-    <div className="min-h-screen bg-[#16233D] flex">
-      <aside className="w-64 bg-[#12203A] border-r border-[#2E4372] min-h-screen sticky top-0 hidden md:block">
-        <div className="p-6 border-b border-[#2E4372]">
-          <Link href="/" className="text-xl font-bold text-primary hover:underline">
+    <div className="min-h-screen bg-[#FF6F59] flex">
+      <aside className="w-64 bg-[#E85A45] border-r border-[#C24F3D] min-h-screen sticky top-0 hidden md:block">
+        <div className="p-6 border-b border-[#C24F3D]">
+          <Link href="/" className="text-xl font-bold text-[#16233D] hover:underline">
             Wasila
           </Link>
-          <p className="text-xs text-slate-400">Freelancer Dashboard</p>
+          <p className="text-xs text-[#3D2A22]">Freelancer Dashboard</p>
         </div>
         <nav className="p-4 space-y-1">
           {navItems.map((item) => {
@@ -49,7 +49,7 @@ export default function FreelancerLayout({ children }) {
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg text-base font-semibold transition ${
                   active
                     ? "bg-primary text-white"
-                    : "text-slate-200 hover:bg-[#1E2F4F] hover:text-white"
+                    : "text-[#3D2A22] hover:bg-[#FF8A75] hover:text-black"
                 }`}
               >
                 <Icon size={20} strokeWidth={2} />
@@ -61,18 +61,18 @@ export default function FreelancerLayout({ children }) {
       </aside>
 
       <main className="flex-1">
-        <div className="md:hidden bg-[#12203A] border-b border-[#2E4372] p-4 flex gap-4 overflow-x-auto">
+        <div className="md:hidden bg-[#E85A45] border-b border-[#C24F3D] p-4 flex gap-4 overflow-x-auto">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="text-sm whitespace-nowrap text-slate-300"
+              className="text-sm whitespace-nowrap text-[#3D2A22]"
             >
               {item.name}
             </Link>
           ))}
         </div>
-        <div className="p-6 md:p-10 max-w-6xl mx-auto text-slate-100">{children}</div>
+        <div className="p-6 md:p-10 max-w-6xl mx-auto text-[#16233D]">{children}</div>
       </main>
     </div>
   );
