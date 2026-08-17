@@ -6,6 +6,8 @@ import { useParams, useRouter } from "next/navigation";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import StatusBadge from "@/components/client/StatusBadge";
+import SkillBadge from "@/components/client/SkillBadge";
+import ReportModal from "@/components/client/ReportModal";
 
 export default function JobDetailPage() {
   const { jobId } = useParams();
@@ -18,6 +20,7 @@ export default function JobDetailPage() {
 
   const [actingOn, setActingOn] = useState(null);
   const [error, setError] = useState("");
+  const [reportTarget, setReportTarget] = useState(null); // { userId, jobId, label } | null
 
   async function handleAccept(proposal) {
     if (
@@ -112,10 +115,31 @@ export default function JobDetailPage() {
                     <div>
                       <p className="font-medium">{p.name || "Freelancer"}</p>
                       {p.headline && <p className="text-xs text-gray-400">{p.headline}</p>}
+                      {p.verifiedSkills?.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mt-1.5">
+                          {p.verifiedSkills.map((skill) => (
+                            <SkillBadge key={skill} skill={skill} />
+                          ))}
+                        </div>
+                      )}
                     </div>
                     <p className="text-lg font-semibold">${p.bidAmount}</p>
                   </div>
-                  <p className="text-sm text-gray-700 whitespace-pre-wrap mb-4">{p.coverLetter}</p>
+                  <p className="text-sm text-gray-700 whitespace-pre-wrap mb-3">{p.coverLetter}</p>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setReportTarget({
+                        userId: p.freelancerUserId,
+                        jobId: job._id,
+                        label: p.name || "this freelancer",
+                      })
+                    }
+                    className="text-xs text-gray-400 hover:text-red-600 mb-3 block"
+                  >
+                    Report this proposal
+                  </button>
 
                   {p.status === "PENDING" ? (
                     <div className="flex gap-3">
@@ -150,6 +174,15 @@ export default function JobDetailPage() {
             </div>
           )}
         </>
+      )}
+
+      {reportTarget && (
+        <ReportModal
+          targetUserId={reportTarget.userId}
+          targetJobId={reportTarget.jobId}
+          targetLabel={reportTarget.label}
+          onClose={() => setReportTarget(null)}
+        />
       )}
     </div>
   );

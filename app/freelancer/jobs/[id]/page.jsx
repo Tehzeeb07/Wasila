@@ -5,6 +5,7 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { formatConvexError } from "@/lib/formatError";
 
 export default function JobDetailPage() {
   const params = useParams();
@@ -51,7 +52,7 @@ export default function JobDetailPage() {
       setReviewStatus("✓ Review submitted!");
       setComment("");
     } catch (err) {
-      setReviewStatus("Error: " + err.message);
+      setReviewStatus("Error: " + formatConvexError(err));
     }
   };
 

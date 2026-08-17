@@ -3,11 +3,18 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import SkillBadge from "@/components/client/SkillBadge"; // ADDED
 
 export default function FreelancerProfilePage() {
   const profile = useQuery(api.freelancerProfiles.getMyProfile);
   const upsertProfile = useMutation(api.freelancerProfiles.upsertProfile);
   const generateUploadUrl = useMutation(api.freelancerProfiles.generateUploadUrl);
+
+  // ADDED — verification progress per skill, computed from actual job/review history
+  const skillStats = useQuery(
+    api.skillBadges.getSkillStats,
+    profile ? { freelancerUserId: profile.userId } : "skip"
+  );
 
   const [headline, setHeadline] = useState("");
   const [bio, setBio] = useState("");
@@ -170,6 +177,41 @@ export default function FreelancerProfilePage() {
                   {skill}
                 </span>
               ))}
+          </div>
+        )}
+
+        {/* ADDED — verification progress, separate from the plain skill-name preview above */}
+        {skillStats && skillStats.length > 0 && (
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Skill Verification
+            </label>
+            <p className="text-xs text-gray-400 mb-3">
+              Based on your completed jobs and client ratings — automatic, no quiz needed.
+            </p>
+            <div className="space-y-2">
+              {skillStats.map((s) => (
+                <div
+                  key={s.skill}
+                  className="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-2.5"
+                >
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">{s.skill}</p>
+                    <p className="text-xs text-gray-400">
+                      {s.completedJobs} completed job{s.completedJobs !== 1 ? "s" : ""}
+                      {s.averageRating !== null ? ` · ${s.averageRating}★ avg` : ""}
+                    </p>
+                  </div>
+                  {s.verified ? (
+                    <SkillBadge skill={s.skill} />
+                  ) : (
+                    <span className="text-xs text-gray-400 whitespace-nowrap">
+                      {s.completedJobs}/3 jobs to verify
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         )}
 

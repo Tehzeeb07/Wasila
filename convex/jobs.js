@@ -1,6 +1,7 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
+import { computeSkillStats } from "./skillBadges";
 
 const statusValidator = v.union(
   v.literal("OPEN"),
@@ -9,6 +10,22 @@ const statusValidator = v.union(
   v.literal("CANCELLED")
 );
 
+function validateJobFields(args) {
+  if (args.title.trim().length < 8) {
+    throw new Error("Title must be at least 8 characters.");
+  }
+  const wordCount = args.description.trim().split(/\s+/).filter(Boolean).length;
+  if (args.description.trim().length < 40 || wordCount < 8) {
+    throw new Error("Description must be at least 8 words.");
+  }
+  if (
+    args.budgetMin !== undefined &&
+    args.budgetMax !== undefined &&
+    args.budgetMax < args.budgetMin
+  ) {
+    throw new Error("Max budget can't be lower than min budget.");
+  }
+}
 async function requireClientOwner(ctx, jobId) {
   const userId = await getAuthUserId(ctx);
   if (!userId) throw new Error("Not authenticated");
@@ -107,12 +124,16 @@ export const getWithAssignedFreelancer = query({
       .withIndex("by_userId", (q) => q.eq("userId", accepted.freelancerUserId))
       .unique();
 
+    const stats = await computeSkillStats(ctx, accepted.freelancerUserId);
+    const verifiedSkills = stats.filter((s) => s.verified).map((s) => s.skill);
+
     return {
       ...job,
       proposal: {
         ...accepted,
         name: profile?.name,
         headline: freelancerProfile?.headline,
+        verifiedSkills,
       },
     };
   },
@@ -131,6 +152,7 @@ export const create = mutation({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
+    validateJobFields(args);
     return await ctx.db.insert("jobs", {
       clientUserId: userId,
       status: "OPEN",
@@ -152,6 +174,7 @@ export const update = mutation({
   },
   handler: async (ctx, args) => {
     const { jobId, ...rest } = args;
+    validateJobFields(rest);
     await requireClientOwner(ctx, jobId);
     await ctx.db.patch(jobId, rest);
   },

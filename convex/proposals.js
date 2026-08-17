@@ -1,8 +1,19 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
+import { computeSkillStats } from "./skillBadges";
 
 // ==================== Freelancer-side (existing) ====================
+
+//edit
+function validateProposalFields(coverLetter, bidAmount) {
+  if (coverLetter.trim().length < 20) {
+    throw new Error("Cover letter must be at least 20 characters — write a real message.");
+  }
+  if (bidAmount <= 0) {
+    throw new Error("Bid amount must be greater than 0.");
+  }
+}
 
 export const submitProposal = mutation({
   args: {
@@ -13,6 +24,8 @@ export const submitProposal = mutation({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not logged in");
+    validateProposalFields(args.coverLetter, args.bidAmount);
+
     const existing = await ctx.db
       .query("proposals")
       .withIndex("by_job_and_freelancer", (q) =>
@@ -29,7 +42,6 @@ export const submitProposal = mutation({
     });
   },
 });
-
 export const getMyProposals = query({
   args: {},
   handler: async (ctx) => {
@@ -77,11 +89,14 @@ export const listForJob = query({
           .query("freelancerProfiles")
           .withIndex("by_userId", (q) => q.eq("userId", p.freelancerUserId))
           .unique();
+        const stats = await computeSkillStats(ctx, p.freelancerUserId);
+        const verifiedSkills = stats.filter((s) => s.verified).map((s) => s.skill);
         return {
           ...p,
           name: profile?.name,
           headline: freelancerProfile?.headline,
           hourlyRate: freelancerProfile?.hourlyRate,
+          verifiedSkills,
         };
       })
     );
