@@ -112,13 +112,21 @@ export default function SignupPage() {
         </div>
 
         <select
-          className="border p-2 w-full"
+          className="border p-2 w-full bg-[#344326] text-white"
           value={role}
-          onChange={(e) => setRole(e.target.value as "FREELANCER" | "CLIENT" | "ADMIN")}
+          onChange={(e) =>
+            setRole(e.target.value as "FREELANCER" | "CLIENT" | "ADMIN")
+          }
         >
-          <option value="FREELANCER">Freelancer</option>
-          <option value="CLIENT">Client</option>
-          <option value="ADMIN">Admin</option>
+          <option value="FREELANCER" className="bg-[#344326] text-white">
+            Freelancer
+          </option>
+          <option value="CLIENT" className="bg-[#344326] text-white">
+            Client
+          </option>
+          <option value="ADMIN" className="bg-[#344326] text-white">
+            Admin
+          </option>
         </select>
 
         {role === "ADMIN" && (

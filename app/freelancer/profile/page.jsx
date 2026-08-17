@@ -11,10 +11,7 @@ export default function FreelancerProfilePage() {
   const upsertProfile = useMutation(api.freelancerProfiles.upsertProfile);
   const generateUploadUrl = useMutation(api.freelancerProfiles.generateUploadUrl);
 
-  const skillStats = useQuery(
-    api.skillBadges.getSkillStats,
-    profile ? { freelancerUserId: profile.userId } : "skip"
-  );
+  const skillStats = null; // TODO: re-enable once convex/skillBadges.js exists (Daniya's feature)
 
   const [headline, setHeadline] = useState("");
   const [bio, setBio] = useState("");

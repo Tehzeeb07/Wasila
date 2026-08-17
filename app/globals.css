@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #A3D977;
-  --color-primary-dark: #8BC34A;
+  --color-primary: #FF6F59;
+  --color-primary-dark: #E85A45;
 }
 
 html {
@@ -11,22 +11,22 @@ html {
 }
 
 :where(.bg-white) {
-  background-color: #425030 !important;
-  color: #f0fdf4;
+  background-color: #1E2F4F !important;
+  color: #F1F5F9;
 }
 
 :where(.bg-white) input,
 :where(.bg-white) textarea,
 :where(.bg-white) select {
-  background-color: #3D4A2A !important;
-  color: #f0fdf4 !important;
-  border-color: #6b8348 !important;
+  background-color: #16233D !important;
+  color: #F1F5F9 !important;
+  border-color: #34486E !important;
   font-size: 1rem !important;
 }
 
 :where(.bg-white) input::placeholder,
 :where(.bg-white) textarea::placeholder {
-  color: #a3b18a !important;
+  color: #94A3B8 !important;
 }
 
 :where(.bg-white) .text-gray-400,
@@ -34,11 +34,11 @@ html {
 :where(.bg-white) .text-gray-600,
 :where(.bg-white) .text-gray-700,
 :where(.bg-white) .text-gray-900 {
-  color: #d1e8c4 !important;
+  color: #CBD5E1 !important;
 }
 
 :where(.bg-white) label {
-  color: #e8f5d9 !important;
+  color: #E2E8F0 !important;
   font-size: 1rem !important;
 }
 
