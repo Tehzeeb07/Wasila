@@ -24,12 +24,12 @@ export default function ClientSidebar({ name }) {
   }
 
   return (
-    <aside className="w-60 shrink-0 border-r border-[#2E4372] bg-[#12203A] flex flex-col">
-      <div className="px-6 py-6 border-b border-[#2E4372]">
-        <Link href="/" className="text-[0.65rem] tracking-widest uppercase text-primary hover:underline">
+    <aside className="w-60 shrink-0 border-r border-[#C24F3D] bg-[#E85A45] flex flex-col">
+      <div className="px-6 py-6 border-b border-[#C24F3D]">
+        <Link href="/" className="text-[0.65rem] tracking-widest uppercase text-[#16233D] hover:underline">
           Wasila
         </Link>
-        <h1 className="text-xl font-semibold mt-1 text-slate-100">Client Portal</h1>
+        <h1 className="text-xl font-semibold mt-1 text-[#16233D]">Client Portal</h1>
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-1">
@@ -42,7 +42,7 @@ export default function ClientSidebar({ name }) {
               className={`block px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                 active
                   ? "bg-primary text-white"
-                  : "text-slate-300 hover:bg-[#1E2F4F]"
+                  : "text-[#3D2A22] hover:bg-[#FF8A75]"
               }`}
             >
               {item.label}
@@ -51,11 +51,11 @@ export default function ClientSidebar({ name }) {
         })}
       </nav>
 
-      <div className="px-6 py-4 border-t border-[#2E4372]">
-        <p className="text-sm font-medium truncate text-slate-100">{name}</p>
+      <div className="px-6 py-4 border-t border-[#C24F3D]">
+        <p className="text-sm font-medium truncate text-[#16233D]">{name}</p>
         <button
           onClick={handleSignOut}
-          className="text-xs uppercase tracking-widest text-slate-400 hover:text-red-400 mt-2"
+          className="text-xs uppercase tracking-widest text-[#3D2A22] hover:text-red-700 mt-2"
         >
           Sign out
         </button>
