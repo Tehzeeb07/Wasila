@@ -5,6 +5,10 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+<<<<<<< HEAD
+=======
+import { formatConvexError } from "@/lib/formatError";
+>>>>>>> Daniya
 
 export default function JobDetailPage() {
   const params = useParams();
@@ -51,7 +55,11 @@ export default function JobDetailPage() {
       setReviewStatus("✓ Review submitted!");
       setComment("");
     } catch (err) {
+<<<<<<< HEAD
       setReviewStatus("Error: " + err.message);
+=======
+      setReviewStatus("Error: " + formatConvexError(err));
+>>>>>>> Daniya
     }
   };
 
@@ -62,6 +70,7 @@ export default function JobDetailPage() {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div className="md:col-span-2 space-y-6">
         <div className="bg-white border border-gray-200 rounded-xl p-8">
+<<<<<<< HEAD
           <h1 className="text-2xl font-bold text-gray-900">{job.title}</h1>
           <Link
             href={`/freelancer/jobs/${params.id}/messages`}
@@ -69,6 +78,14 @@ export default function JobDetailPage() {
           >
             💬 Open Project Chat
           </Link>
+=======
+          <Link
+  href={`/freelancer/jobs/${params.id}/messages`}
+  className="text-emerald-600 text-sm hover:underline"
+>
+  💬 Open Project Chat
+</Link>
+>>>>>>> Daniya
           <p className="text-emerald-700 font-semibold mt-2">
             ${job.budgetMin ?? "?"} - ${job.budgetMax ?? "?"}
           </p>

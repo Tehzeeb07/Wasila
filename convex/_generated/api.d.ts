@@ -18,8 +18,13 @@ import type * as jobs from "../jobs.js";
 import type * as messages from "../messages.js";
 import type * as portfolioItems from "../portfolioItems.js";
 import type * as proposals from "../proposals.js";
+import type * as reports from "../reports.js";
 import type * as reviews from "../reviews.js";
 import type * as seed from "../seed.js";
+<<<<<<< HEAD
+=======
+import type * as skillBadges from "../skillBadges.js";
+>>>>>>> Daniya
 import type * as users from "../users.js";
 
 import type {
@@ -39,8 +44,13 @@ declare const fullApi: ApiFromModules<{
   messages: typeof messages;
   portfolioItems: typeof portfolioItems;
   proposals: typeof proposals;
+  reports: typeof reports;
   reviews: typeof reviews;
   seed: typeof seed;
+<<<<<<< HEAD
+=======
+  skillBadges: typeof skillBadges;
+>>>>>>> Daniya
   users: typeof users;
 }>;
 
