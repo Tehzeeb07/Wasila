@@ -16,7 +16,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-56 shrink-0 border-r border-[#556B2F] bg-[#2E3820] p-4 flex flex-col h-screen">
+    <aside className="w-56 shrink-0 border-r border-[#2E4372] bg-[#12203A] p-4 flex flex-col h-screen">
       <Link
         href="/"
         className="text-lg font-semibold mb-6 px-2 text-primary hover:underline block"
@@ -32,8 +32,8 @@ export function Sidebar() {
               href={item.href}
               className={`px-3 py-2 rounded-md text-sm font-medium transition ${
                 isActive
-                  ? "bg-primary text-[#3D4A2A]"
-                  : "text-green-100 hover:bg-[#425030]"
+                  ? "bg-primary text-white"
+                  : "text-slate-300 hover:bg-[#1E2F4F]"
               }`}
             >
               {item.label}
