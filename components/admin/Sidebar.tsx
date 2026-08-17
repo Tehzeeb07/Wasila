@@ -16,10 +16,10 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-56 shrink-0 border-r border-[#2E4372] bg-[#12203A] p-4 flex flex-col h-screen">
+    <aside className="w-56 shrink-0 border-r border-[#C24F3D] bg-[#E85A45] p-4 flex flex-col h-screen">
       <Link
         href="/"
-        className="text-lg font-semibold mb-6 px-2 text-primary hover:underline block"
+        className="text-lg font-semibold mb-6 px-2 text-[#16233D] hover:underline block"
       >
         ← Wasila
       </Link>
@@ -33,7 +33,7 @@ export function Sidebar() {
               className={`px-3 py-2 rounded-md text-sm font-medium transition ${
                 isActive
                   ? "bg-primary text-white"
-                  : "text-slate-300 hover:bg-[#1E2F4F]"
+                  : "text-[#3D2A22] hover:bg-[#FF8A75]"
               }`}
             >
               {item.label}
