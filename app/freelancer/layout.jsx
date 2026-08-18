@@ -30,13 +30,13 @@ export default function FreelancerLayout({ children }) {
   const pathname = usePathname();
 
   return (
-    <div className="min-h-screen bg-[#FF6F59] flex">
-      <aside className="w-64 bg-[#E85A45] border-r border-[#C24F3D] min-h-screen sticky top-0 hidden md:block">
-        <div className="p-6 border-b border-[#C24F3D]">
-          <Link href="/" className="text-xl font-bold text-[#16233D] hover:underline">
+    <div className="min-h-screen bg-[#14532D] flex">
+      <aside className="w-64 bg-[#10251A] border-r border-[#1F6B41] min-h-screen sticky top-0 hidden md:block">
+        <div className="p-6 border-b border-[#1F6B41]">
+          <Link href="/" className="text-xl font-bold text-primary hover:underline">
             Wasila
           </Link>
-          <p className="text-xs text-[#3D2A22]">Freelancer Dashboard</p>
+          <p className="text-xs text-[#C5DDCB]">Freelancer Dashboard</p>
         </div>
         <nav className="p-4 space-y-1">
           {navItems.map((item) => {
@@ -48,8 +48,8 @@ export default function FreelancerLayout({ children }) {
                 href={item.href}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg text-base font-semibold transition ${
                   active
-                    ? "bg-primary text-white"
-                    : "text-[#3D2A22] hover:bg-[#FF8A75] hover:text-black"
+                    ? "bg-primary text-[#10251A]"
+                    : "text-[#F7F7F2] hover:bg-[#163B27]"
                 }`}
               >
                 <Icon size={20} strokeWidth={2} />
@@ -61,18 +61,18 @@ export default function FreelancerLayout({ children }) {
       </aside>
 
       <main className="flex-1">
-        <div className="md:hidden bg-[#E85A45] border-b border-[#C24F3D] p-4 flex gap-4 overflow-x-auto">
+        <div className="md:hidden bg-[#10251A] border-b border-[#1F6B41] p-4 flex gap-4 overflow-x-auto">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="text-sm whitespace-nowrap text-[#3D2A22]"
+              className="text-sm whitespace-nowrap text-[#F7F7F2]"
             >
               {item.name}
             </Link>
           ))}
         </div>
-        <div className="p-6 md:p-10 max-w-6xl mx-auto text-[#16233D]">{children}</div>
+        <div className="p-6 md:p-10 max-w-6xl mx-auto text-[#F7F7F2]">{children}</div>
       </main>
     </div>
   );
