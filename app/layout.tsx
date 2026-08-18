@@ -14,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-[#FF6F59] text-slate-900 antialiased">
+      <body className="min-h-screen bg-[#14532D] text-[#F7F7F2] antialiased">
         <ConvexClientProvider>{children}</ConvexClientProvider>
       </body>
     </html>
