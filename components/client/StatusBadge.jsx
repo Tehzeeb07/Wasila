@@ -6,8 +6,8 @@ const LABELS = {
 };
 
 const STYLES = {
-  OPEN: "bg-emerald-600 text-white border-emerald-500",
-  IN_PROGRESS: "bg-primary text-white border-primary",
+  OPEN: "bg-primary text-[#10251A] border-primary-dark",
+  IN_PROGRESS: "bg-amber-500 text-white border-amber-400",
   COMPLETED: "bg-blue-600 text-white border-blue-500",
   CANCELLED: "bg-red-600 text-white border-red-500",
 };
