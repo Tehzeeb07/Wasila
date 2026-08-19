@@ -17,11 +17,8 @@ export function Sidebar() {
 
   return (
     <aside className="w-56 shrink-0 border-r border-[#1F6B41] bg-[#10251A] p-4 flex flex-col h-screen">
-      <Link
-        href="/"
-        className="text-lg font-semibold mb-6 px-2 text-primary hover:underline block"
-      >
-        ← Wasila
+      <Link href="/" className="mb-6 px-2 block">
+        <img src="/logo.png" alt="Wasila" className="h-8" />
       </Link>
       <nav className="flex flex-col gap-1">
         {navItems.map((item) => {
