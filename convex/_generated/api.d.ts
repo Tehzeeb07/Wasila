@@ -21,10 +21,7 @@ import type * as proposals from "../proposals.js";
 import type * as reports from "../reports.js";
 import type * as reviews from "../reviews.js";
 import type * as seed from "../seed.js";
-<<<<<<< HEAD
-=======
 import type * as skillBadges from "../skillBadges.js";
->>>>>>> Daniya
 import type * as users from "../users.js";
 
 import type {
@@ -47,10 +44,7 @@ declare const fullApi: ApiFromModules<{
   reports: typeof reports;
   reviews: typeof reviews;
   seed: typeof seed;
-<<<<<<< HEAD
-=======
   skillBadges: typeof skillBadges;
->>>>>>> Daniya
   users: typeof users;
 }>;
 

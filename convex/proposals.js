@@ -5,7 +5,6 @@ import { computeSkillStats } from "./skillBadges";
 
 // ==================== Freelancer-side (existing) ====================
 
-//edit
 function validateProposalFields(coverLetter, bidAmount) {
   if (coverLetter.trim().length < 20) {
     throw new Error("Cover letter must be at least 20 characters — write a real message.");
@@ -42,7 +41,6 @@ export const submitProposal = mutation({
     });
   },
 });
-<<<<<<< HEAD
 
 // All jobs where I (the freelancer) am the accepted proposal — powers the
 // freelancer's Messages inbox, mirroring listMineWithChats on the client side.
@@ -87,8 +85,6 @@ export const listMyChats = query({
   },
 });
 
-=======
->>>>>>> Daniya
 export const getMyProposals = query({
   args: {},
   handler: async (ctx) => {
