@@ -12,7 +12,7 @@ const STYLES = {
   CANCELLED: "bg-red-600 text-white border-red-500",
 };
 
-export default function StatusBadge({ status }) {
+export default function StatusBadge({ status }) {     
   return (
     <span
       className={`inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium border ${
@@ -22,4 +22,4 @@ export default function StatusBadge({ status }) {
       {LABELS[status] || status}
     </span>
   );
-}
+} 
