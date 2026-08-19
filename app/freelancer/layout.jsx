@@ -33,8 +33,8 @@ export default function FreelancerLayout({ children }) {
     <div className="min-h-screen bg-[#14532D] flex">
       <aside className="w-64 bg-[#10251A] border-r border-[#1F6B41] min-h-screen sticky top-0 hidden md:block">
         <div className="p-6 border-b border-[#1F6B41]">
-          <Link href="/" className="text-xl font-bold text-primary hover:underline">
-            Wasila
+          <Link href="/">
+            <img src="/logo.png" alt="Wasila" className="h-8" />
           </Link>
           <p className="text-xs text-[#C5DDCB]">Freelancer Dashboard</p>
         </div>

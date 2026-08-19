@@ -26,8 +26,8 @@ export default function ClientSidebar({ name }) {
   return (
     <aside className="w-60 shrink-0 border-r border-[#1F6B41] bg-[#10251A] flex flex-col">
       <div className="px-6 py-6 border-b border-[#1F6B41]">
-        <Link href="/" className="text-[0.65rem] tracking-widest uppercase text-primary hover:underline">
-          Wasila
+        <Link href="/">
+          <img src="/logo.png" alt="Wasila" className="h-6" />
         </Link>
         <h1 className="text-xl font-semibold mt-1 text-[#F7F7F2]">Client Portal</h1>
       </div>
