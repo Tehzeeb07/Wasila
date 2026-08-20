@@ -80,5 +80,8 @@ aside .text-\[\#F7F7F2\] { color: #1F3B2E !important; }
 .text-gray-800,
 .text-slate-800,
 .text-foreground {
-  color: #F4EFE4 !important;
+  color: #000000 !important;
+}
+body {
+  color: #000000;
 }

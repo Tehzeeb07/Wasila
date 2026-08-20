@@ -6,7 +6,23 @@ import { StatCard } from "@/components/admin/StatCard";
 
 export default function AdminDashboardPage() {
   const stats = useQuery(api.admin.getDashboardStats);
-  const topFreelancers = useQuery(api.admin.getTopFreelancers);
+  const topFreelancers = [
+    {
+      name: "Tehzeeb Shaikh",
+      avgRating: 5.0,
+      reviewCount: 12,
+    },
+    {
+      name: "Zainab Afzal",
+      avgRating: 4.9,
+      reviewCount: 10,
+    },
+    {
+      name: "Daniya Saiyed",
+      avgRating: 4.8,
+      reviewCount: 8,
+    },
+  ];
 
   if (stats === undefined) {
     return <p className="text-gray-500">Loading dashboard…</p>;
@@ -49,7 +65,7 @@ export default function AdminDashboardPage() {
         </div>
 
         <div className="bg-white border border-gray-200 rounded-2xl p-6">
-          <h3 className="font-semibold text-gray-900 mb-4">
+          <h3 className="font-semibold text-black-900 mb-4">
             🏆 Top Rated Freelancers
           </h3>
 
