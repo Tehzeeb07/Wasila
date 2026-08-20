@@ -6,10 +6,12 @@ import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { formatConvexError } from "@/lib/formatError";
+import ReportButton from "@/components/shared/ReportButton";
 
 export default function JobDetailPage() {
   const params = useParams();
   const job = useQuery(api.jobs.getJobById, { id: params.id });
+  const profile = useQuery(api.freelancerProfiles.getMyProfile);
   const submitProposal = useMutation(api.proposals.submitProposal);
   const submitReview = useMutation(api.reviews.submitReview);
   const jobReviews = useQuery(api.reviews.getJobReviews, { jobId: params.id });
@@ -21,6 +23,28 @@ export default function JobDetailPage() {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [reviewStatus, setReviewStatus] = useState("");
+
+  const generateProposal = () => {
+    if (!profile || !job) return;
+
+    const matchedSkills = (job.skills ?? []).filter((s) =>
+      profile.skills?.some((ps) => ps.toLowerCase() === s.toLowerCase())
+    );
+
+    const draft = `Hi,
+
+I'm excited to apply for "${job.title}". ${
+      matchedSkills.length > 0
+        ? `With hands-on experience in ${matchedSkills.join(", ")}, I'm confident I can deliver quality results for this project.`
+        : `I have relevant experience that aligns well with what you're looking for.`
+    }
+
+${profile.bio ? profile.bio.split(".")[0] + "." : ""} I'd love to discuss how I can help bring your project to life.
+
+Looking forward to connecting!`;
+
+    setCoverLetter(draft);
+  };
 
   const handleApply = async (e) => {
     e.preventDefault();
@@ -157,6 +181,13 @@ export default function JobDetailPage() {
       <div className="bg-white border border-gray-200 rounded-xl p-6 h-fit">
         <h2 className="font-semibold text-gray-900 mb-4">Submit a Proposal</h2>
         <form onSubmit={handleApply} className="space-y-4">
+          <button
+            type="button"
+            onClick={generateProposal}
+            className="text-xs bg-emerald-50 text-emerald-700 font-semibold px-3 py-1.5 rounded-lg hover:bg-emerald-100 transition"
+          >
+            ✨ Generate with AI
+          </button>
           <textarea
             value={coverLetter}
             onChange={(e) => setCoverLetter(e.target.value)}

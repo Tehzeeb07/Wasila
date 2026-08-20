@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #4ADE80;
-  --color-primary-dark: #22C55E;
+  --color-primary: #C97C4B;
+  --color-primary-dark: #A8623A;
+}
+
+:root {
+  --foreground: #F4EFE4;
+  --background: #163B27;
 }
 
 html {
@@ -11,22 +16,22 @@ html {
 }
 
 :where(.bg-white) {
-  background-color: #163B27 !important;
-  color: #F7F7F2;
+  background-color: #F4EFE4 !important;
+  color: #1F3B2E;
 }
 
 :where(.bg-white) input,
 :where(.bg-white) textarea,
 :where(.bg-white) select {
-  background-color: #10251A !important;
-  color: #F7F7F2 !important;
-  border-color: #1F6B41 !important;
+  background-color: #ECE4D3 !important;
+  color: #1F3B2E !important;
+  border-color: #C9A87C !important;
   font-size: 1rem !important;
 }
 
 :where(.bg-white) input::placeholder,
 :where(.bg-white) textarea::placeholder {
-  color: #9CB8A8 !important;
+  color: #8B7E68 !important;
 }
 
 :where(.bg-white) .text-gray-400,
@@ -34,11 +39,11 @@ html {
 :where(.bg-white) .text-gray-600,
 :where(.bg-white) .text-gray-700,
 :where(.bg-white) .text-gray-900 {
-  color: #D5E8DC !important;
+  color: #3F5548 !important;
 }
 
 :where(.bg-white) label {
-  color: #F7F7F2 !important;
+  color: #1F3B2E !important;
   font-size: 1rem !important;
 }
 
@@ -50,3 +55,30 @@ html {
   font-size: 0.95rem !important;
 }
 
+/* --- Theme swap: sidebar -> olive green, main area -> cream --- */
+.bg-\[\#2E3820\] { background-color: #6B7B3A !important; }
+.bg-\[\#163B27\] { background-color: #F4EFE4 !important; }
+
+.bg-\[\#10251A\] { background-color: #ECE4D3 !important; }
+.bg-\[\#425030\] { background-color: #7C8D46 !important; }
+.bg-\[\#3D4A2A\] { background-color: #C97C4B !important; }
+
+.border-\[\#556B2F\] { border-color: #C9A87C !important; }
+.border-\[\#1F6B41\] { border-color: #C9A87C !important; }
+
+/* Sidebar text only — scoped to aside element */
+aside .text-\[\#F7F7F2\] { color: #1F3B2E !important; }
+.text-green-100 { color: #1F3B2E !important; }
+
+/* Catch-all: common dark text classes -> cream */
+.text-gray-900,
+.text-black,
+.text-slate-900,
+.text-zinc-900,
+.text-neutral-900,
+.text-stone-900,
+.text-gray-800,
+.text-slate-800,
+.text-foreground {
+  color: #F4EFE4 !important;
+}

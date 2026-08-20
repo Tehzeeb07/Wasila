@@ -5,6 +5,7 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import Link from "next/link";
 import { Search, Heart, Clock } from "lucide-react";
+import { parseSmartSearch } from "@/lib/parseSearch";
 
 const AVATAR_COLORS = [
   "bg-emerald-500",
@@ -35,14 +36,20 @@ export default function JobsPage() {
     return ["All", ...Array.from(set)];
   }, [allJobs]);
 
+  const parsed = useMemo(() => parseSmartSearch(search), [search]);
+
   const jobs = useMemo(() => {
     if (!baseJobs) return baseJobs;
     return baseJobs.filter((j) => {
       const matchesCategory = category === "All" || j.category === category;
       const matchesBudget = (j.budgetMax ?? 0) <= maxBudget || !j.budgetMax;
-      return matchesCategory && matchesBudget;
+      const matchesMaxBudget =
+        !parsed.maxBudget || (j.budgetMax ?? Infinity) <= parsed.maxBudget;
+      const matchesMinBudget =
+        !parsed.minBudget || (j.budgetMin ?? 0) >= parsed.minBudget;
+      return matchesCategory && matchesBudget && matchesMaxBudget && matchesMinBudget;
     });
-  }, [baseJobs, category, maxBudget]);
+  }, [baseJobs, category, maxBudget, parsed]);
 
   return (
     <div className="space-y-6 -m-6 md:-m-10">
@@ -63,7 +70,7 @@ export default function JobsPage() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by job title or keyword..."
+            placeholder="Try: React developer under $50..."
             className="flex-1 text-sm focus:outline-none py-2.5"
           />
           <button className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-6 py-2.5 rounded-xl transition">

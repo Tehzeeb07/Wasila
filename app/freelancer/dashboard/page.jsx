@@ -19,7 +19,7 @@ export default function DashboardPage() {
   const proposals = useQuery(api.proposals.getMyProposals);
   const bookmarks = useQuery(api.bookmarks.getMyBookmarks);
   const reviews = useQuery(api.reviews.getMyReviews);
-  const allJobs = useQuery(api.jobs.listOpenJobs);
+  const recommendedJobs = useQuery(api.jobs.getRecommendedJobs) ?? [];
 
   const isLoading =
     profile === undefined ||
@@ -30,7 +30,6 @@ export default function DashboardPage() {
   const totalProposals = proposals?.length ?? 0;
   const accepted = proposals?.filter((p) => p.status === "ACCEPTED") ?? [];
   const pending = proposals?.filter((p) => p.status === "PENDING").length ?? 0;
-  const responded = proposals?.filter((p) => p.status !== "PENDING").length ?? 0;
 
   const responseRate =
     totalProposals > 0
@@ -55,13 +54,6 @@ export default function DashboardPage() {
   ];
   const completedFields = profileFields.filter(Boolean).length;
   const profileCompletion = Math.round((completedFields / profileFields.length) * 100);
-
-  const recommendedJobs = (allJobs ?? []).filter((job) => {
-    if (!profile?.skills?.length) return false;
-    return job.skills?.some((s) =>
-      profile.skills.some((ps) => ps.toLowerCase() === s.toLowerCase())
-    );
-  }).slice(0, 3);
 
   return (
     <div className="space-y-6">
@@ -142,11 +134,10 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Recommended jobs */}
       {recommendedJobs.length > 0 && (
         <div className="bg-white border border-gray-200 rounded-2xl p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-gray-900">Recommended for You</h2>
+            <h2 className="font-semibold text-gray-900">✨ Recommended for You</h2>
             <Link href="/freelancer/jobs" className="text-xs text-emerald-600 hover:underline">
               View all
             </Link>
@@ -158,7 +149,12 @@ export default function DashboardPage() {
                 href={`/freelancer/jobs/${job._id}`}
                 className="border border-gray-100 rounded-xl p-4 hover:border-emerald-300 hover:shadow-sm transition"
               >
-                <h3 className="font-semibold text-gray-900 text-sm truncate">{job.title}</h3>
+                <div className="flex items-center justify-between mb-1">
+                  <h3 className="font-semibold text-gray-900 text-sm truncate">{job.title}</h3>
+                  <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full shrink-0 ml-2">
+                    {job.matchScore}% match
+                  </span>
+                </div>
                 <p className="text-xs text-emerald-700 font-semibold mt-1">
                   ${job.budgetMin ?? "?"}–${job.budgetMax ?? "?"}
                 </p>
