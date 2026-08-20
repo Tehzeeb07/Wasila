@@ -87,7 +87,10 @@ Looking forward to connecting!`;
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div className="md:col-span-2 space-y-6">
         <div className="bg-white border border-gray-200 rounded-xl p-8">
-          <h1 className="text-2xl font-bold text-gray-900">{job.title}</h1>
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold text-gray-900">{job.title}</h1>
+            <ReportButton targetJobId={job._id} />
+          </div>
           <Link
             href={`/freelancer/jobs/${params.id}/messages`}
             className="text-emerald-600 text-sm hover:underline"
