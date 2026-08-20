@@ -6,6 +6,7 @@ import { StatCard } from "@/components/admin/StatCard";
 
 export default function AdminDashboardPage() {
   const stats = useQuery(api.admin.getDashboardStats);
+  const topFreelancers = useQuery(api.admin.getTopFreelancers);
 
   if (stats === undefined) {
     return <p className="text-gray-500">Loading dashboard…</p>;
@@ -45,6 +46,41 @@ export default function AdminDashboardPage() {
               </li>
             ))}
           </ul>
+        </div>
+
+        <div className="bg-white border border-gray-200 rounded-2xl p-6">
+          <h3 className="font-semibold text-gray-900 mb-4">
+            🏆 Top Rated Freelancers
+          </h3>
+
+          {topFreelancers === undefined && (
+            <p className="text-gray-400 text-sm">Loading…</p>
+          )}
+
+          {topFreelancers?.length === 0 && (
+            <p className="text-gray-400 text-sm">No reviews yet.</p>
+          )}
+
+          <div className="space-y-3">
+            {topFreelancers?.map((f, i) => (
+              <div key={f.name} className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="w-6 h-6 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center">
+                    {i + 1}
+                  </span>
+
+                  <span className="text-sm font-medium text-gray-900">
+                    {f.name}
+                  </span>
+                </div>
+
+                <span className="text-sm text-gray-500">
+                  ⭐ {f.avgRating} ({f.reviewCount} review
+                  {f.reviewCount !== 1 ? "s" : ""})
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">

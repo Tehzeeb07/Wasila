@@ -216,6 +216,43 @@ export const getFullAnalytics = query({
   },
 });
 
+export const getTopFreelancers = query({
+  args: {},
+  handler: async (ctx) => {
+    await requireAdmin(ctx);
+
+    const [freelancers, reviews] = await Promise.all([
+      ctx.db
+        .query("userProfiles")
+        .withIndex("by_role", (q) => q.eq("role", "FREELANCER"))
+        .collect(),
+      ctx.db.query("reviews").collect(),
+    ]);
+
+    const ratingsByUser: Record<string, { total: number; count: number }> = {};
+    for (const r of reviews) {
+      const key = r.targetUserId;
+      if (!ratingsByUser[key]) ratingsByUser[key] = { total: 0, count: 0 };
+      ratingsByUser[key].total += r.rating;
+      ratingsByUser[key].count += 1;
+    }
+
+    const ranked = freelancers
+      .map((f) => {
+        const stats = ratingsByUser[f.userId];
+        return {
+          name: f.name,
+          avgRating: stats ? +(stats.total / stats.count).toFixed(1) : null,
+          reviewCount: stats?.count ?? 0,
+        };
+      })
+      .filter((f) => f.avgRating !== null)
+      .sort((a, b) => (b.avgRating! - a.avgRating!) || (b.reviewCount - a.reviewCount))
+      .slice(0, 5);
+
+    return ranked;
+  },
+});
 
 export const exportUsers = query({
   args: {},
