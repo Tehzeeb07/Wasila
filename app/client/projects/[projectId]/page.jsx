@@ -6,6 +6,8 @@ import { useParams } from "next/navigation";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import StatusBadge from "@/components/client/StatusBadge";
+import SkillBadge from "@/components/client/SkillBadge";
+import ReportModal from "@/components/client/ReportModal";
 
 export default function ProjectDetailPage() {
   const { projectId } = useParams(); // this is the job id
@@ -17,6 +19,7 @@ export default function ProjectDetailPage() {
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [reportTarget, setReportTarget] = useState(null); // { userId, jobId, label } | null
 
   async function handleStatusChange(status) {
     setBusy(true);
@@ -66,6 +69,30 @@ export default function ProjectDetailPage() {
           : "Freelancer assigned"}
         {freelancer?.bidAmount ? ` · $${freelancer.bidAmount}` : ""}
       </p>
+
+      {freelancer?.verifiedSkills?.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          {freelancer.verifiedSkills.map((skill) => (
+            <SkillBadge key={skill} skill={skill} />
+          ))}
+        </div>
+      )}
+
+      {freelancer && (
+        <button
+          type="button"
+          onClick={() =>
+            setReportTarget({
+              userId: freelancer.freelancerUserId,
+              jobId: job._id,
+              label: freelancer.name || "this freelancer",
+            })
+          }
+          className="text-xs text-gray-400 hover:text-red-600 mb-6 block"
+        >
+          Report freelancer
+        </button>
+      )}
 
       {isActive && (
         <div className="bg-white border border-gray-200 rounded-lg p-5 mb-6 flex items-center justify-between">
@@ -127,6 +154,15 @@ export default function ProjectDetailPage() {
             Send
           </button>
         </form>
+      )}
+
+      {reportTarget && (
+        <ReportModal
+          targetUserId={reportTarget.userId}
+          targetJobId={reportTarget.jobId}
+          targetLabel={reportTarget.label}
+          onClose={() => setReportTarget(null)}
+        />
       )}
     </div>
   );

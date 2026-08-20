@@ -1,13 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { AvailabilityToggle } from "@/components/shared/AvailabilityToggle";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import SkillBadge from "@/components/client/SkillBadge";
 
 export default function FreelancerProfilePage() {
   const profile = useQuery(api.freelancerProfiles.getMyProfile);
   const upsertProfile = useMutation(api.freelancerProfiles.upsertProfile);
   const generateUploadUrl = useMutation(api.freelancerProfiles.generateUploadUrl);
+
+  const skillStats = null; // TODO: re-enable once convex/skillBadges.js exists (Daniya's feature)
 
   const [headline, setHeadline] = useState("");
   const [bio, setBio] = useState("");
@@ -69,7 +73,6 @@ export default function FreelancerProfilePage() {
     return <div className="text-gray-500">Loading...</div>;
   }
 
-  // Completion checklist
   const checklist = [
     { label: "Headline", weight: 20, done: !!headline },
     { label: "Bio", weight: 20, done: !!bio },
@@ -87,12 +90,10 @@ export default function FreelancerProfilePage() {
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Main form */}
         <form
           onSubmit={handleSave}
           className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 p-8 space-y-6"
         >
-          {/* Avatar row */}
           <div className="flex items-center gap-5 pb-6 border-b border-gray-100">
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-2xl font-bold shrink-0">
               {headline ? headline[0].toUpperCase() : "F"}
@@ -105,6 +106,13 @@ export default function FreelancerProfilePage() {
                 Your profile photo comes from your account avatar.
               </p>
             </div>
+          </div>
+
+          <div className="pb-6 border-b border-gray-100">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Availability
+            </label>
+            <AvailabilityToggle current={profile?.availability} />
           </div>
 
           <div>
@@ -200,6 +208,40 @@ export default function FreelancerProfilePage() {
             </div>
           )}
 
+          {skillStats && skillStats.length > 0 && (
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Skill Verification
+              </label>
+              <p className="text-xs text-gray-400 mb-3">
+                Based on your completed jobs and client ratings — automatic, no quiz needed.
+              </p>
+              <div className="space-y-2">
+                {skillStats.map((s) => (
+                  <div
+                    key={s.skill}
+                    className="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-2.5"
+                  >
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">{s.skill}</p>
+                      <p className="text-xs text-gray-400">
+                        {s.completedJobs} completed job{s.completedJobs !== 1 ? "s" : ""}
+                        {s.averageRating !== null ? ` · ${s.averageRating}★ avg` : ""}
+                      </p>
+                    </div>
+                    {s.verified ? (
+                      <SkillBadge skill={s.skill} />
+                    ) : (
+                      <span className="text-xs text-gray-400 whitespace-nowrap">
+                        {s.completedJobs}/3 jobs to verify
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="flex items-center gap-4 pt-2">
             <button
               type="submit"
@@ -220,7 +262,6 @@ export default function FreelancerProfilePage() {
           </div>
         </form>
 
-        {/* Completion sidebar */}
         <div className="bg-white rounded-2xl border border-gray-200 p-6 h-fit">
           <h2 className="font-semibold text-gray-900 mb-5">
             Complete your profile

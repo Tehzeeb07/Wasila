@@ -5,6 +5,7 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { formatConvexError } from "@/lib/formatError";
 
 export default function JobDetailPage() {
   const params = useParams();
@@ -57,7 +58,7 @@ Looking forward to connecting!`;
       setCoverLetter("");
       setBidAmount("");
     } catch (err) {
-      setStatus("Error: " + err.message);
+      setStatus("Error: " + formatConvexError(err));
     }
   };
 
@@ -74,7 +75,7 @@ Looking forward to connecting!`;
       setReviewStatus("✓ Review submitted!");
       setComment("");
     } catch (err) {
-      setReviewStatus("Error: " + err.message);
+      setReviewStatus("Error: " + formatConvexError(err));
     }
   };
 

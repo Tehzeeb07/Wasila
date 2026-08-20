@@ -16,12 +16,9 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-56 shrink-0 border-r border-[#556B2F] bg-[#2E3820] p-4 flex flex-col h-screen">
-      <Link
-        href="/"
-        className="text-lg font-semibold mb-6 px-2 text-primary hover:underline block"
-      >
-        ← Wasila
+    <aside className="w-56 shrink-0 border-r border-[#1F6B41] bg-[#10251A] p-4 flex flex-col h-screen">
+      <Link href="/" className="mb-6 px-2 block">
+        <img src="/logo.png" alt="Wasila" className="h-8" />
       </Link>
       <nav className="flex flex-col gap-1">
         {navItems.map((item) => {
@@ -32,8 +29,8 @@ export function Sidebar() {
               href={item.href}
               className={`px-3 py-2 rounded-md text-sm font-medium transition ${
                 isActive
-                  ? "bg-primary text-[#3D4A2A]"
-                  : "text-green-100 hover:bg-[#425030]"
+                  ? "bg-primary text-[#10251A]"
+                  : "text-[#F7F7F2] hover:bg-[#163B27]"
               }`}
             >
               {item.label}

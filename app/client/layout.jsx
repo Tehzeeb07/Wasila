@@ -22,7 +22,7 @@ export default function ClientLayout({ children }) {
 
   if (profile === undefined) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-sm text-green-100 bg-[#3D4A2A]">
+      <div className="min-h-screen flex items-center justify-center text-sm text-[#F7F7F2] bg-[#14532D]">
         Loading…
       </div>
     );
@@ -31,9 +31,9 @@ export default function ClientLayout({ children }) {
   if (!profile || profile.role !== "CLIENT") return null;
 
   return (
-    <div className="min-h-screen flex bg-[#3D4A2A]">
+    <div className="min-h-screen flex bg-[#14532D]">
       <ClientSidebar name={profile.name} />
-      <main className="flex-1 px-8 py-8 max-w-5xl text-green-50">{children}</main>
+      <main className="flex-1 px-8 py-8 max-w-5xl text-[#F7F7F2]">{children}</main>
     </div>
   );
 }

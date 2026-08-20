@@ -1,28 +1,52 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #A3D977;
-  --color-primary-dark: #8BC34A;
+  --color-primary: #4ADE80;
+  --color-primary-dark: #22C55E;
 }
 
 html {
   scroll-behavior: smooth;
+  font-size: 17px;
 }
 
 :where(.bg-white) {
-  background-color: #425030 !important;
-  color: #f0fdf4;
+  background-color: #163B27 !important;
+  color: #F7F7F2;
 }
 
 :where(.bg-white) input,
 :where(.bg-white) textarea,
 :where(.bg-white) select {
-  background-color: #3D4A2A !important;
-  color: #f0fdf4 !important;
-  border-color: #556B2F !important;
+  background-color: #10251A !important;
+  color: #F7F7F2 !important;
+  border-color: #1F6B41 !important;
+  font-size: 1rem !important;
 }
 
 :where(.bg-white) input::placeholder,
 :where(.bg-white) textarea::placeholder {
-  color: #a3b18a !important;
+  color: #9CB8A8 !important;
 }
+
+:where(.bg-white) .text-gray-400,
+:where(.bg-white) .text-gray-500,
+:where(.bg-white) .text-gray-600,
+:where(.bg-white) .text-gray-700,
+:where(.bg-white) .text-gray-900 {
+  color: #D5E8DC !important;
+}
+
+:where(.bg-white) label {
+  color: #F7F7F2 !important;
+  font-size: 1rem !important;
+}
+
+.text-xs {
+  font-size: 0.85rem !important;
+}
+
+.text-sm {
+  font-size: 0.95rem !important;
+}
+
