@@ -36,7 +36,7 @@ export default function FreelancerLayout({ children }) {
           <Link href="/">
             <img src="/logo.png" alt="Wasila" className="h-8" />
           </Link>
-          <p className="text-xs text-[#C5DDCB]">Freelancer Dashboard</p>
+          <p className="text-xl font-semibold mt-1 text-[#F7F7F2]">Freelancer Dashboard</p>
         </div>
         <nav className="p-4 space-y-1">
           {navItems.map((item) => {
